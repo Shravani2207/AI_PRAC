@@ -233,4 +233,67 @@ ________________________________________
 Answer:
 This algorithm finds one solution to the N-Queens problem. Since it's using backtracking, it tries to place queens in all possible configurations. If a valid solution is found, it will return and print the board. If you want to find all solutions, you'd need to modify the algorithm to not stop after the first solution is found, and instead continue searching for more solutions.
 ________________________________________
+1. What is the N-Queens problem?
+•	Answer:
+The N-Queens problem is a classic puzzle in which the task is to place N queens on an N×N chessboard such that no two queens can attack each other. This means no two queens can share the same row, column, or diagonal.
+________________________________________
+2. How does the backtracking approach work for solving the N-Queens problem?
+•	Answer:
+Backtracking is used to find solutions by trying to place queens one by one in different columns of each row. If a queen can be placed without violating the constraints (i.e., no two queens attack each other), we move on to the next queen. If placing a queen results in an invalid state, we backtrack by removing the previous queens and trying a different position. This continues until a valid solution is found or all possibilities are exhausted.
+________________________________________
+3. Why is backtracking used for solving the N-Queens problem?
+•	Answer:
+Backtracking is used because it allows us to explore all possible configurations of queens on the chessboard. If we encounter an invalid configuration, backtracking helps us undo the previous step and try a different option. It provides an efficient way to search through the possible placements and guarantees that all solutions are explored.
+________________________________________
+4. What are the conditions that need to be checked before placing a queen on the board?
+•	Answer:
+Before placing a queen on the board, we check:
+o	Column constraint: The queen should not be placed in a column where another queen is already placed.
+o	Diagonal constraint: The queen should not be placed on the same diagonal as any previously placed queens. This is checked for both the primary and secondary diagonals.
+________________________________________
+5. Can you explain how the recursive backtracking function works in this problem?
+•	Answer:
+The recursive function attempts to place queens row by row. For each row, the function tries all columns to place a queen and checks if it’s safe to do so. If placing a queen results in a valid configuration, the function proceeds to the next row. If a queen cannot be placed in any column of a row, the function backtracks by removing the last placed queen and tries placing the previous queens in new positions. This continues until all queens are placed successfully or all possibilities are explored.
+________________________________________
+6. What is the role of the "isSafe" function in this algorithm?
+•	Answer:
+The "isSafe" function checks whether a queen can be placed at a particular position on the chessboard. It ensures that no other queen is in the same column or on the same diagonal. If the position is safe, it returns true; otherwise, it returns false.
+________________________________________
+7. How does the algorithm backtrack when it encounters a conflict?
+•	Answer:
+When the algorithm encounters a conflict (i.e., a queen cannot be placed in a particular column of a row), it backtracks by removing the queen placed in the previous row and tries the next possible column for that row. This process repeats recursively, moving backward through the rows until a feasible position is found or all possibilities are exhausted.
+________________________________________
+8. How do you know when to stop the algorithm and consider a solution valid?
+•	Answer:
+The algorithm stops when all N queens are placed on the board without any conflicts (i.e., no two queens are in the same row, column, or diagonal). At this point, a valid solution is found, and the board configuration is printed.
+________________________________________
+9. What would happen if there is no valid solution for a given N?
+•	Answer:
+If there is no valid solution, the algorithm will exhaust all possible configurations and backtrack all the way to the first queen without finding a valid placement. In such cases, the algorithm will terminate, indicating that no solution exists for the given value of N.
+________________________________________
+10. What is the time complexity of the backtracking solution for the N-Queens problem?
+•	Answer:
+The time complexity of the backtracking algorithm for the N-Queens problem is O(N!). This is because in the worst case, the algorithm needs to explore all possible ways to place the N queens, which is roughly N factorial (N!) possible configurations. However, backtracking helps prune the search space by eliminating invalid configurations early, which can sometimes reduce the actual time complexity.
+________________________________________
+11. How would you modify the algorithm to find all possible solutions to the N-Queens problem?
+•	Answer:
+To find all possible solutions, you would modify the algorithm to not terminate after finding the first valid solution. Instead of returning after finding a solution, the algorithm would continue to backtrack and store each valid solution it finds. All solutions could then be printed or returned as a list of configurations.
+________________________________________
+12. Can you implement the solution for larger values of N, such as N=8?
+•	Answer:
+Yes, the algorithm works for any N, including larger values like N=8. However, the time taken to find a solution increases as N grows due to the factorial growth of possible configurations. The algorithm remains efficient in finding solutions but may take more time for larger boards.
+________________________________________
+13. What are the real-world applications of solving the N-Queens problem using backtracking?
+•	Answer:
+While the N-Queens problem itself is a puzzle, the techniques used in its solution, such as backtracking, are widely applicable to other problems in artificial intelligence and optimization, such as:
+o	Puzzle solving (e.g., Sudoku, maze-solving)
+o	Constraint satisfaction problems in scheduling and resource allocation
+o	Game theory (e.g., chess-like games)
+o	Graph coloring and map coloring problems
+________________________________________
+14. Can this approach be used for solving other constraint satisfaction problems?
+•	Answer:
+Yes, backtracking is a general technique used to solve a variety of constraint satisfaction problems (CSPs), including problems like Sudoku, graph coloring, knapsack problem, traveling salesman problem, and crossword puzzles, where the goal is to find a solution that satisfies a set of constraints.
+________________________________________
+
 
