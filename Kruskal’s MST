@@ -1,220 +1,165 @@
-from collections import defaultdict
-class Graph:
-    def __init__(self, vertices):
-        self.V = vertices # No. of vertices
-        self.graph = [] # default dictionary
-    def addEdge(self, u, v, w):
-        self.graph.append([u, v, w])
-    def find(self, parent, i):
-        if parent[i] == i:
-            return i
-        return self.find(parent, parent[i])
-    def union(self, parent, rank, x, y):
-        xroot = self.find(parent, x)
-        yroot = self.find(parent, y)
-        if rank[xroot] < rank[yroot]:
-            parent[xroot] = yroot
-        elif rank[xroot] > rank[yroot]:
-            parent[yroot] = xroot
-        else:
-            parent[yroot] = xroot
-            rank[xroot] += 1
-    def KruskalMST(self):
-        result = [] # This will store the resultant MST
-        i = 0
-        e = 0
-        self.graph = sorted(self.graph,
-        key=lambda item: item[2])
-        parent = []
-        rank = []
-        for node in range(self.V):
-            parent.append(node)
-            rank.append(0)
-        while e < self.V - 1:
-            u, v, w = self.graph[i]
-            i = i + 1
-            x = self.find(parent, u)
-            y = self.find(parent, v)
-            if x != y:
-                e = e + 1
-                result.append([u, v, w])
-                self.union(parent, rank, x, y)
-        minimumCost = 0
-        print ("Edges in the constructed MST")
-        for u, v, weight in result:
-            minimumCost += weight
-            print("%d -- %d == %d" % (u, v, weight))
-        print("Minimum Spanning Tree" , minimumCost)
-g = Graph(4)
-g.addEdge(0, 1, 10)
-g.addEdge(0, 2, 6)
-g.addEdge(0, 3, 5)
-g.addEdge(1, 3, 15)
-g.addEdge(2, 3, 4)
-# Function call
-g.KruskalMST()
-
+edges = [
+    (2, 'A', 'B'),
+    (3, 'A', 'C'),
+    (1, 'B', 'C'),
+    (1, 'B', 'D'),
+    (4, 'C', 'D')
+]
+parent = {}
+def find(node):
+    if parent[node] != node:
+        parent[node] = find(parent[node])
+    return parent[node]
+def union(u, v):
+    parent[find(u)] = find(v)
+def kruskal(edges):
+    for node in ['A', 'B', 'C', 'D']:
+        parent[node] = node
+    edges.sort()
+    total_cost = 0
+    for weight, u, v in edges:
+        if find(u) != find(v):
+            print(f"Edge selected: {u} - {v} with weight {weight}")
+            union(u, v)
+            total_cost += weight
+    print("Total Minimum Cost:", total_cost)
+kruskal(edges)
 
 
 ________________________________________
-🔷 Importing Libraries
-from collections import defaultdict
-•	Imports defaultdict (though unused here) from the collections module. Useful when dealing with graphs, but not essential in this implementation.
+📦 Graph Representation
+edges = [
+    (2, 'A', 'B'),
+    (3, 'A', 'C'),
+    (1, 'B', 'C'),
+    (1, 'B', 'D'),
+    (4, 'C', 'D')
+]
+•	This is a list of edges, each represented as a tuple: (weight, node1, node2).
+•	The graph is undirected and weighted.
 ________________________________________
-🔷 Graph Class Definition
-class Graph:
-•	Begins the definition of the Graph class that will implement Kruskal’s Algorithm.
+🗂️ Parent Dictionary Initialization
+parent = {}
+•	This dictionary stores the parent of each node in the Disjoint Set data structure (used for cycle detection).
 ________________________________________
-🔷 Initialization Method
-    def __init__(self, vertices):
-        self.V = vertices  # No. of vertices
-        self.graph = []    # Stores edges as [u, v, w]
-•	self.V stores the number of vertices in the graph.
-•	self.graph is a list of edges, where each edge is a list [u, v, w] (from vertex u to v with weight w).
+🔎 find(node) Function
+def find(node):
+    if parent[node] != node:
+        parent[node] = find(parent[node])
+    return parent[node]
+•	This is the Find operation with path compression.
+•	It returns the root parent of a node and compresses the path for faster future lookups.
 ________________________________________
-🔷 Add Edge Method
-    def addEdge(self, u, v, w):
-        self.graph.append([u, v, w])
-•	Adds an edge between vertex u and v with weight w to the graph.
+🔗 union(u, v) Function
+def union(u, v):
+    parent[find(u)] = find(v)
+•	This is the Union operation: it merges the sets of u and v by making one's root the parent of the other.
+•	Helps ensure that selected edges do not form a cycle.
 ________________________________________
-🔷 Find Method (DSU Find with Path Compression)
-    def find(self, parent, i):
-        if parent[i] == i:
-            return i
-        return self.find(parent, parent[i])
-Sure! Let's break down this find() function line by line — it's used in the Disjoint Set Union (DSU) or Union-Find data structure.
+🏗️ Kruskal’s Algorithm Main Function
+def kruskal(edges):
+•	Defines the main function to build the MST using Kruskal’s algorithm.
 ________________________________________
-🔧 Function Definition
-def find(self, parent, i):
-•	This defines a method find that takes:
-o	parent: a list where parent[i] tells you the parent (or root) of element i.
-o	i: the element whose set representative (or "root") you want to find.
-•	self means it's a method inside a class (usually a graph class).
+Step 1: Initialize Parent for All Nodes
+    for node in ['A', 'B', 'C', 'D']:
+        parent[node] = node
+•	Initially, each node is its own parent (each in its own set).
 ________________________________________
-🧠 Purpose
-The purpose of find() is to determine the representative (or root) of the set to which element i belongs.
-This helps:
-•	Check if two elements are in the same set.
-•	Avoid cycles in algorithms like Kruskal's MST.
+Step 2: Sort Edges by Weight
+    edges.sort()
+•	Kruskal’s algorithm requires edges to be processed in ascending order of weight.
 ________________________________________
-🔍 Line-by-Line Explanation
-if parent[i] == i:
-    return i
-•	Base case: If i is its own parent, then i is the root of its set.
-•	So we return i.
+Step 3: Process Each Edge
+    
+total_cost = 0
+•	Initializes a variable to keep track of the total weight (or cost) of the Minimum Spanning Tree (MST).
 ________________________________________
-return self.find(parent, parent[i])
-•	If i is not its own parent, it means we haven't reached the root yet.
-•	We recursively call find() on parent[i] to keep going up the tree until we find the root.
-•	This continues until we hit the base case
+for weight, u, v in edges:
+•	Iterates over each edge in the sorted list of edges.
+•	weight is the cost of the edge.
+•	u and v are the two vertices connected by the edge.
 ________________________________________
-🔷 Union Method (DSU Union by Rank)
-    def union(self, parent, rank, x, y):
-        xroot = self.find(parent, x)
-        yroot = self.find(parent, y)
-•	Finds the roots of the sets containing x and y.
-        if rank[xroot] < rank[yroot]:
-            parent[xroot] = yroot
-        elif rank[xroot] > rank[yroot]:
-            parent[yroot] = xroot
-        else:
-            parent[yroot] = xroot
-            rank[xroot] += 1
-•	________________________________________def union(self, parent, rank, x, y):
-•	This function merges the sets that contain elements x and y.
-•	parent[]: Tracks the parent (or root) of each node.
-•	rank[]: Approximates the depth (or height) of each tree to optimize merging.
-•	The goal is to attach the shorter tree under the taller one to keep trees shallow.
-•	________________________________________xroot = self.find(parent, x)
-•	yroot = self.find(parent, y)
-•	Find the root of the set containing x and the root of the set containing y.
-•	We use the find() function to get these roots.
-•	We only want to merge roots, not arbitrary nodes.
-•	________________________________________
-•	if rank[xroot] < rank[yroot]:
-•	    parent[xroot] = yroot
-•	If the tree rooted at xroot is shorter, attach it under yroot.
-•	This avoids increasing the tree height unnecessarily.
-•	________________________________________
-•	elif rank[xroot] > rank[yroot]:
-•	    parent[yroot] = xroot
-•	If the tree rooted at yroot is shorter, attach it under xroot.
-•	________________________________________
-•	else:
-•	    parent[yroot] = xroot
-•	    rank[xroot] += 1
-•	If both trees have the same rank:
-•	Pick one arbitrarily (here, xroot) to be the new root.
-•	Increase its rank by 1 since its height increases.
+    if find(u) != find(v):
+•	Checks whether the two vertices u and v are in different sets.
+•	If they are in the same set, adding this edge would create a cycle, so we skip it.
+•	If they are in different sets, it’s safe to add this edge to the MST.
 ________________________________________
-🔷 Kruskal’s MST Function
-    def KruskalMST(self):
-        result = []  # To store the edges included in MST
-        i = 0        # Index for sorted edges
-        e = 0        # Number of edges in MST
-•	Initializes variables: result holds final MST edges, i is edge index, e is count of MST edges added.
-        self.graph = sorted(self.graph, key=lambda item: item[2])
-•	Sorts all edges in non-decreasing order based on edge weight (greedy step).
-        parent = []
-        rank = []
-        for node in range(self.V):
-            parent.append(node)
-            rank.append(0)
-•	Initializes parent and rank arrays for DSU (each node is initially its own parent).
-while e < self.V - 1:
-•	The MST must have exactly V - 1 edges, where V is the number of vertices.
-•	e is a counter for how many edges we've added to the MST so far.
+        print(f"Edge selected: {u} - {v} with weight {weight}")
+•	Displays the edge that is selected to be part of the MST, along with its weight.
 ________________________________________
-u, v, w = self.graph[i]
-i = i + 1
-•	self.graph[i] is a tuple (u, v, w) representing an edge:
-o	u and v are the two vertices.
-o	w is the weight of the edge.
-•	i is the index of the current edge being processed — edges are assumed to be sorted by weight.
+        union(u, v)
+•	Merges the sets of u and v, meaning they are now connected in the MST.
+•	Ensures future edges between them are recognized as cycle-forming and avoided.
 ________________________________________
-x = self.find(parent, u)
-y = self.find(parent, v)
-•	Find the set representatives (roots) of u and v using the find() function.
-•	This is to check if adding the edge would form a cycle.
+        total_cost += weight
+•	Adds the weight of the selected edge to the total MST cost.
 ________________________________________
-if x != y:
-•	If u and v are in different sets, adding the edge won’t form a cycle, so it's safe to add.
+✅ Example
+If edges are:
+edges = [
+    (1, 'B', 'C'),
+    (1, 'B', 'D'),
+    (2, 'A', 'B'),
+    ...
+]
+The output may look like:
+Edge selected: B - C with weight 1
+Edge selected: B - D with weight 1
+Edge selected: A - B with weight 2
+And total_cost would become 4.
 ________________________________________
-    e = e + 1
-    result.append([u, v, w])
-    self.union(parent, rank, x, y)
-•	Increase the edge count.
-•	Add the edge to the result list.
-•	Merge the sets of u and v using union() to update the disjoint set.
+Would you like a visual diagram of how these edges form the MST?
 ________________________________________
-📊 Printing the MST
-minimumCost = 0
-print("Edges in the constructed MST")
-for u, v, weight in result:
-    minimumCost += weight
-    print("%d -- %d == %d" % (u, v, weight))
-•	Iterate over all edges in the MST.
-•	Print them in the format: u -- v == weight.
-•	Accumulate the total weight in minimumCost.
+Step 4: Final Cost Output
+    print("Total Minimum Cost:", total_cost)
+•	After all valid edges are added, print the total cost of the MST.
 ________________________________________
-print("Minimum Spanning Tree", minimumCost)
-•	Final print showing the total weight of the MST.
+🧪 Function Call
+kruskal(edges)
+•	Runs the full Kruskal’s algorithm on the provided edges.
 ________________________________________
-📌 Initialization
-g = Graph(4)
-•	This creates a graph object g with 4 vertices.
-•	Later you would need to add edges to g.graph before calling Kruskal's method.
-🔷 Driver Code
-g = Graph(4)
-g.addEdge(0, 1, 10)
-g.addEdge(0, 2, 6)
-g.addEdge(0, 3, 5)
-g.addEdge(1, 3, 15)
-g.addEdge(2, 3, 4)
-g.KruskalMST()
-•	Creates a graph with 4 vertices and 5 edges.
-•	Adds edges with given weights.
-•	Calls KruskalMST() to compute and display the MST.
+✅ Expected Output
+Edge selected: B - C with weight 1
+Edge selected: B - D with weight 1
+Edge selected: A - B with weight 2
+Total Minimum Cost: 4
+________________________________________
+🔹 Basic Understanding
+1.	What does this code implement?
+Kruskal’s Algorithm for finding the Minimum Spanning Tree (MST) of a graph.
+2.	What is the format of the edges list?
+A list of tuples: (weight, node1, node2).
+3.	What is the purpose of sorting the edges?
+To process the edges in increasing order of weight as required by Kruskal’s Algorithm.
+________________________________________
+🔹 Disjoint Set (DSU)
+4.	What does the find() function do?
+It returns the representative (root) of the set a node belongs to using path compression.
+5.	Why do we use path compression in find()?
+To optimize repeated find calls by flattening the tree structure.
+6.	What is the role of the union() function?
+It merges the sets of two nodes to indicate they are now connected.
+7.	How does this code avoid cycles?
+By only adding an edge if the two vertices are in different sets (find(u) != find(v)).
+________________________________________
+🔹 Algorithm Behavior
+8.	What is the time complexity of Kruskal’s Algorithm?
+O(E log E) for sorting + nearly O(1) per find/union if using path compression → overall ≈ O(E log E)
+9.	What happens if the graph is disconnected?
+The algorithm will not connect all nodes; it will only return a forest (not a single tree).
+10.	What is printed by this code?
+The selected edges for the MST and the total cost.
+________________________________________
+🔹 Conceptual Questions
+11.	What data structure is used for cycle detection?
+Disjoint Set Union (DSU), also known as Union-Find.
+12.	Why is Kruskal’s algorithm greedy?
+Because it always picks the smallest weight edge that doesn’t form a cycle.
+13.	Can Kruskal’s algorithm work with negative edge weights?
+Yes, it only compares edge weights and doesn't require them to be positive.
+14.	Why is the total number of selected edges always V-1?
+Because a spanning tree of a graph with V vertices has exactly V - 1 edges.
+
 ________________________________________
 🔹 1. What is Kruskal’s Algorithm?
 Answer:
@@ -263,13 +208,7 @@ yes "Kruskal’s algorithm works fine with negative weights because it only care
 ________________________________________
 🔹 11. Why do we need exactly V - 1 edges in MST?
 Answer:
-Because a spanning tree for a graph with V vertices must connect all vertices with minimum number of edges to avoid cycles, which is V - 1.
-________________________________________
-🔹 12. What is the role of parent[] and rank[] arrays?
-Answer:
-•	parent[] helps to track the set (tree) each vertex belongs to.
-•	rank[] helps to keep the tree flat, improving performance of find().
-________________________________________
+Because a spanning tree for a graph with V vertices must connect all vertices with minimum number of edges to avoid cycles, which is V - 1.________________________________________
 🔹 13. What is the greedy choice made by Kruskal’s algorithm?
 Answer:
 At each step, it picks the smallest edge (in terms of weight) that doesn’t form a cycle.
@@ -298,11 +237,6 @@ ________________________________________
 🔹 6. How does this code detect cycles?
 Answer:
 Using Disjoint Set Union (DSU) with find() and union() operations. If two nodes are in the same set, adding an edge between them would form a cycle.
-________________________________________
-🔹 7. What is the role of parent[] and rank[] arrays?
-Answer:
-•	parent[] tracks the representative of each set.
-•	rank[] helps keep the set trees shallow by attaching the shorter tree under the taller one in union().
 ________________________________________
 🔹 9. Why does the MST contain exactly V - 1 edges?
 Answer:
@@ -338,3 +272,23 @@ Answer:
 •	Output: MST edges printed, and total weight printed as Minimum Spanning Tree.
 ________________________________________
 
+Algorithm Steps:
+Sort all edges of the graph in increasing order of weight.
+
+Initialize:
+
+Create a disjoint set (Union-Find) for all vertices (each vertex is in its own set initially).
+
+Set MST edge count = 0 and total cost = 0.
+
+For each edge (u, v) in sorted edge list:
+
+If find(u) ≠ find(v) (i.e., u and v are in different sets):
+
+Add edge (u, v) to the MST.
+
+Perform union(u, v) to merge the sets.
+
+Increment edge count and update total cost.
+
+Stop when MST contains (V - 1) edges.
