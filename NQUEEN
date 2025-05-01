@@ -152,39 +152,14 @@ A: To assign values to variables such that all constraints are satisfied.
 4.	Q: What is the difference between local search and CSP solving?
 A: Local search doesn’t consider constraints explicitly, while CSP solving is focused on satisfying all constraints during the search.
 ________________________________________
-🎨 Graph Coloring Specific Questions
-5.	Q: What is the Graph Coloring problem?
-A: It involves assigning colors to graph vertices so that no two adjacent vertices share the same color.
-6.	Q: What is a chromatic number of a graph?
-A: The smallest number of colors needed to color a graph properly.
-7.	Q: What is a k-colorable graph?
-A: A graph that can be colored using at most k colors without any two adjacent vertices sharing the same color.
-8.	Q: What is the greedy coloring algorithm?
-A: It's a heuristic where we assign the smallest available color to each vertex in a specific order, avoiding colors used by its neighbors.
-9.	Q: Does greedy coloring always give an optimal solution?
-A: No, greedy coloring does not always produce the minimal number of colors; it depends on the order of vertices.
-10.	Q: What is the time complexity of greedy graph coloring?
-A: O(V²) in the worst case if we check all neighbors for every vertex.
-________________________________________
 🧠 Deeper Understanding and Application Questions
 11.	Q: Give a real-world example of CSP.
 A: Scheduling exams where no student has overlapping papers; each subject is a variable, timeslots are domains, and constraints are based on student enrollments.
 12.	Q: What is the role of domain and constraint in CSP?
 A: Domains define the possible values a variable can take; constraints restrict which combinations of variable assignments are allowed.
-13.	Q: How does graph coloring relate to CSP?
-A: In CSP terms, each vertex is a variable, the domain is the list of available colors, and the constraint is that adjacent vertices must not share the same color.
-14.	Q: What is the worst-case number of colors greedy coloring may use?
-A: (Δ + 1), where Δ is the maximum degree of any vertex in the graph.
+
 15.	Q: What is backtracking in CSP and how is it different from greedy?
 A: Backtracking explores all possible assignments and backtracks when constraints are violated. Greedy selects the most immediate valid choice without backtracking.
-________________________________________
-🧪 Possible Practical/Viva Extensions
-16.	Q: What is a complete graph’s chromatic number?
-A: For a complete graph with n vertices, the chromatic number is n, since each vertex is adjacent to all others.
-17.	Q: Can greedy coloring fail to find the optimal coloring? Give an example.
-A: Yes. For example, in a crown graph, greedy may use more colors depending on the order of vertices, even though the graph is 2-colorable.
-18.	Q: How does the order of vertices affect greedy coloring?
-A: The order can lead to suboptimal solutions — different orders may use fewer or more colors.
 ________________________________________
 1. What is the purpose of the isSafe() function?
 Answer:
