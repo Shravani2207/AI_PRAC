@@ -1,0 +1,43 @@
+public class NewStudent {
+    public String name { get; set; }
+    public String phone { get; set; }
+    public String industry { get; set; }
+    public String website { get; set; }
+// Return list of industry options
+    public List<SelectOption> getIndustryOptions() {
+        return new List<SelectOption>{
+            new SelectOption('', '- None -'),
+            new SelectOption('IT', 'IT'),
+            new SelectOption('MECH', 'MECH'),
+            new SelectOption('CHEM', 'CHEM'),
+            new SelectOption('PHARMA', 'PHARMA')
+        };
+    } // Create Account and save it
+    public PageReference create() {
+        if (String.isNotBlank(name)) {
+            Account acc = new Account(Name = name, Phone = phone, Industry = industry, Website = website);
+            insert acc;
+            return new PageReference('/' + acc.Id).setRedirect(true);
+        }
+        ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Please enter Account Name'));
+        return null;
+    }
+}
+
+
+<apex:page controller="NewStudent">
+    <apex:form >
+        <apex:pageBlock title="New Account">
+            <apex:pageMessages />
+            <apex:pageBlockSection >
+                <apex:inputText value="{!name}" label="Account Name" required="true"/>
+                <apex:inputText value="{!phone}" label="Phone"/>
+                <apex:selectList value="{!industry}" label="Industry">
+                    <apex:selectOptions value="{!industryOptions}"/>
+                </apex:selectList>
+                <apex:inputText value="{!website}" label="Website"/>
+            </apex:pageBlockSection>
+            <apex:commandButton value="Save" action="{!create}"/>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>
