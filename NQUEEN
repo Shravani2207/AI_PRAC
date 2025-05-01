@@ -1,0 +1,236 @@
+global N
+N = 4
+def printSolution(board):
+    for i in range(N):
+        for j in range(N):
+            print(board[i][j], end=' ')
+        print()
+def isSafe(board, row, col):
+    for i in range(col):
+        if board[row][i] == 1:
+            return False
+    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
+
+    # Check lower diagonal on the left side
+    for i, j in zip(range(row, N, 1), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
+    return True
+def solveNQUtil(board, col):
+    # Base case: If all queens are placed, return True
+    if col >= N:
+        return True
+    for i in range(N):
+        if isSafe(board, i, col):
+            board[i][col] = 1
+            if solveNQUtil(board, col + 1) == True:
+                return True
+            board[i][col] = 0
+    return False
+def solveNQ():
+    board = [[0, 0, 0, 0],
+             [0, 0, 0, 0],
+             [0, 0, 0, 0],
+             [0, 0, 0, 0]]
+    if solveNQUtil(board, 0) == False:
+        print("Solution does not exist")
+        return False
+    printSolution(board)
+    return True
+if solveNQ():
+    print(True)  # Print True if a solution exists
+
+
+
+
+________________________________________
+🔍 Problem: N-Queens (N = 4)
+Place N queens on an N×N chessboard such that no two queens attack each other.
+________________________________________
+📌 Line-by-line Explanation
+global N
+N = 4
+•	Declares a global variable N which determines the size of the board (4x4) and the number of queens to place.
+________________________________________
+def printSolution(board):
+    for i in range(N):
+        for j in range(N):
+            print(board[i][j], end=' ')
+        print()
+•	This function prints the board configuration.
+•	It loops through all rows and columns and prints 1 for a queen and 0 for empty.
+________________________________________
+def isSafe(board, row, col):
+•	This function checks whether it's safe to place a queen at position (row, col).
+________________________________________
+    for i in range(col):
+        if board[row][i] == 1:
+            return False
+•	Checks the left side of the current row to ensure no other queen is there.
+________________________________________
+    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
+•	Checks the upper-left diagonal for a queen.
+________________________________________
+    for i, j in zip(range(row, N, 1), range(col, -1, -1)):
+        if board[i][j] == 1:
+            return False
+•	Checks the lower-left diagonal for a queen.
+________________________________________
+    return True
+•	If none of the above checks find a conflict, the position is safe, so return True.
+________________________________________
+def solveNQUtil(board, col):
+•	This is the main recursive function that tries to place queens column by column.
+________________________________________
+    if col >= N:
+        return True
+•	Base case: All queens are placed successfully. Return True.
+________________________________________
+    for i in range(N):
+•	Try placing a queen in each row of the current column.
+________________________________________
+        if isSafe(board, i, col):
+            board[i][col] = 1
+•	If it's safe, place the queen at (i, col).
+________________________________________
+            if solveNQUtil(board, col + 1) == True:
+                return True
+•	Recursively try to place queens in the next column.
+•	If successful, propagate the success upward by returning True.
+________________________________________
+            board[i][col] = 0
+•	Backtracking step: If placing a queen in the current row/column doesn't lead to a solution, remove it and try the next row.
+________________________________________
+    return False
+•	If the queen can’t be placed in any row in this column, return False to trigger backtracking.
+________________________________________
+def solveNQ():
+•	This is the driver function that sets up the board and starts the solving process.
+________________________________________
+    board = [[0, 0, 0, 0],
+             [0, 0, 0, 0],
+             [0, 0, 0, 0],
+             [0, 0, 0, 0]]
+•	Creates an empty 4x4 board, all initialized with 0 (no queens placed).
+________________________________________
+    if solveNQUtil(board, 0) == False:
+        print("Solution does not exist")
+        return False
+•	Calls the recursive solver starting from column 0.
+•	If no solution is found, it prints that and returns False.
+________________________________________
+    printSolution(board)
+    return True
+•	If a solution is found, print it using printSolution() and return True.
+________________________________________
+if solveNQ():
+    print(True)  # Print True if a solution exists
+•	Calls the solveNQ() function and prints True if it found a valid solution.
+________________________________________
+✅ Sample Output:
+0 0 1 0 
+1 0 0 0 
+0 0 0 1 
+0 1 0 0 
+True
+This output represents one possible valid placement of 4 queens on the board.
+________________________________________
+🔍 General Theory-Based Questions
+1.	Q: What is a Constraint Satisfaction Problem (CSP)?
+A: A CSP is a problem composed of variables, domains for those variables, and constraints that restrict the values the variables can take.
+2.	Q: What are the three main components of a CSP?
+A:
+o	X: Set of variables
+o	D: Set of domains for each variable
+o	C: Set of constraints among the variables
+3.	Q: What is the objective in a CSP?
+A: To assign values to variables such that all constraints are satisfied.
+4.	Q: What is the difference between local search and CSP solving?
+A: Local search doesn’t consider constraints explicitly, while CSP solving is focused on satisfying all constraints during the search.
+________________________________________
+🎨 Graph Coloring Specific Questions
+5.	Q: What is the Graph Coloring problem?
+A: It involves assigning colors to graph vertices so that no two adjacent vertices share the same color.
+6.	Q: What is a chromatic number of a graph?
+A: The smallest number of colors needed to color a graph properly.
+7.	Q: What is a k-colorable graph?
+A: A graph that can be colored using at most k colors without any two adjacent vertices sharing the same color.
+8.	Q: What is the greedy coloring algorithm?
+A: It's a heuristic where we assign the smallest available color to each vertex in a specific order, avoiding colors used by its neighbors.
+9.	Q: Does greedy coloring always give an optimal solution?
+A: No, greedy coloring does not always produce the minimal number of colors; it depends on the order of vertices.
+10.	Q: What is the time complexity of greedy graph coloring?
+A: O(V²) in the worst case if we check all neighbors for every vertex.
+________________________________________
+🧠 Deeper Understanding and Application Questions
+11.	Q: Give a real-world example of CSP.
+A: Scheduling exams where no student has overlapping papers; each subject is a variable, timeslots are domains, and constraints are based on student enrollments.
+12.	Q: What is the role of domain and constraint in CSP?
+A: Domains define the possible values a variable can take; constraints restrict which combinations of variable assignments are allowed.
+13.	Q: How does graph coloring relate to CSP?
+A: In CSP terms, each vertex is a variable, the domain is the list of available colors, and the constraint is that adjacent vertices must not share the same color.
+14.	Q: What is the worst-case number of colors greedy coloring may use?
+A: (Δ + 1), where Δ is the maximum degree of any vertex in the graph.
+15.	Q: What is backtracking in CSP and how is it different from greedy?
+A: Backtracking explores all possible assignments and backtracks when constraints are violated. Greedy selects the most immediate valid choice without backtracking.
+________________________________________
+🧪 Possible Practical/Viva Extensions
+16.	Q: What is a complete graph’s chromatic number?
+A: For a complete graph with n vertices, the chromatic number is n, since each vertex is adjacent to all others.
+17.	Q: Can greedy coloring fail to find the optimal coloring? Give an example.
+A: Yes. For example, in a crown graph, greedy may use more colors depending on the order of vertices, even though the graph is 2-colorable.
+18.	Q: How does the order of vertices affect greedy coloring?
+A: The order can lead to suboptimal solutions — different orders may use fewer or more colors.
+________________________________________
+1. What is the purpose of the isSafe() function?
+Answer:
+The isSafe() function checks whether it's safe to place a queen at a given position (row, col) on the board. It ensures that the queen isn't attacked by any other queen already placed on the board. The function checks:
+•	The current row to the left (to ensure no other queens are placed there).
+•	The upper-left diagonal.
+•	The lower-left diagonal.
+If no queens are attacking the position, it returns True, otherwise False.
+________________________________________
+2. What is the role of the solveNQUtil() function?
+Answer:
+The solveNQUtil() function is the recursive backtracking function that tries to place queens on the board column by column. It attempts to place a queen in each row of the current column and recursively tries to place queens in the next column. If it finds a valid configuration (i.e., all queens placed without conflicts), it returns True. If not, it removes the queen (backtracks) and tries another row. This continues until all queens are successfully placed or all possibilities are exhausted.
+________________________________________
+3. How does the backtracking work in this code?
+Answer:
+Backtracking is used when the algorithm places a queen in a position but later discovers that the configuration doesn't lead to a solution. In such cases, the algorithm removes the queen (backtracks) and tries a different position. Specifically, in the solveNQUtil() function, if placing a queen in a particular row doesn't lead to a valid solution, the queen is removed (board[i][col] = 0), and the algorithm tries placing the queen in the next row of the current column. This process continues until all queens are placed successfully or no valid solution is found.
+________________________________________
+4. What does the solveNQ() function do?
+Answer:
+The solveNQ() function is the main driver function that initializes the board (with all zeros, indicating no queens are placed) and starts the solving process by calling the recursive function solveNQUtil(). It checks if a solution is found and prints the solution board using the printSolution() function. If no solution is found, it prints "Solution does not exist."
+________________________________________
+5. What does the printSolution() function do?
+Answer:
+The printSolution() function prints the current board configuration to the console. Each row of the board is printed, with 1 representing a queen and 0 representing an empty space. This function is called when a valid configuration of queens is found.
+________________________________________
+6. How does the algorithm know when it has successfully placed all queens?
+Answer:
+The algorithm knows it has successfully placed all queens when the col variable in solveNQUtil() exceeds or equals the size of the board N. This is checked in the line:
+if col >= N:
+    return True
+If all queens are placed (i.e., there are N queens on the board), the function returns True, indicating that the solution is complete.
+________________________________________
+7. Can this code be used for any value of N, or is it limited to 4?
+Answer:
+This code can be used for any value of N, not just 4. The variable N is global, so you can modify it to change the size of the board and the number of queens to place. For example, changing N = 8 would solve the 8-Queens problem on an 8x8 board. However, for very large values of N, the algorithm may take longer to run due to its exponential time complexity.
+________________________________________
+8. What is the time complexity of this algorithm?
+Answer:
+The time complexity of this algorithm is O(N!), where N is the size of the board (and the number of queens). This is because the algorithm explores all possible ways to place N queens on the board. For each column, it tries placing a queen in each of the N rows and recursively checks the next column. The factorial time complexity comes from the fact that the recursive function explores multiple configurations in a backtracking manner, trying different placements and backtracking when necessary.
+________________________________________
+9. What happens if a solution is not possible?
+Answer:
+If no valid solution is possible (for example, if there are too many queens for a small board), the function solveNQ() will print "Solution does not exist". This happens when the recursive function solveNQUtil() exhausts all possible configurations and finds no valid arrangement of queens.
+________________________________________
+10. How does this algorithm handle the case where there are multiple solutions?
+Answer:
+This algorithm finds one solution to the N-Queens problem. Since it's using backtracking, it tries to place queens in all possible configurations. If a valid solution is found, it will return and print the board. If you want to find all solutions, you'd need to modify the algorithm to not stop after the first solution is found, and instead continue searching for more solutions.
+________________________________________
+
