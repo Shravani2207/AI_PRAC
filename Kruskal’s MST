@@ -1,50 +1,50 @@
 from collections import defaultdict
 class Graph:
-	def __init__(self, vertices):
-		self.V = vertices # No. of vertices
-		self.graph = [] # default dictionary
-	def addEdge(self, u, v, w):
-		self.graph.append([u, v, w])
-	def find(self, parent, i):
-		if parent[i] == i:
-			return i
-		return self.find(parent, parent[i])
-	def union(self, parent, rank, x, y):
-		xroot = self.find(parent, x)
-		yroot = self.find(parent, y)
-		if rank[xroot] < rank[yroot]:
-			parent[xroot] = yroot
-		elif rank[xroot] > rank[yroot]:
-			parent[yroot] = xroot
-		else:
-			parent[yroot] = xroot
-			rank[xroot] += 1
-	def KruskalMST(self):
-		result = [] # This will store the resultant MST
-		i = 0
-		e = 0
-		self.graph = sorted(self.graph,
-		key=lambda item: item[2])
-		parent = []
-		rank = []
-		for node in range(self.V):
-			parent.append(node)
-			rank.append(0)
-		while e < self.V - 1:
-			u, v, w = self.graph[i]
-			i = i + 1
-			x = self.find(parent, u)
-			y = self.find(parent, v)
-			if x != y:
-				e = e + 1
-				result.append([u, v, w])
-				self.union(parent, rank, x, y)
-		minimumCost = 0
-		print ("Edges in the constructed MST")
-		for u, v, weight in result:
-			minimumCost += weight
-			print("%d -- %d == %d" % (u, v, weight))
-		print("Minimum Spanning Tree" , minimumCost)
+    def __init__(self, vertices):
+        self.V = vertices # No. of vertices
+        self.graph = [] # default dictionary
+    def addEdge(self, u, v, w):
+        self.graph.append([u, v, w])
+    def find(self, parent, i):
+        if parent[i] == i:
+            return i
+        return self.find(parent, parent[i])
+    def union(self, parent, rank, x, y):
+        xroot = self.find(parent, x)
+        yroot = self.find(parent, y)
+        if rank[xroot] < rank[yroot]:
+            parent[xroot] = yroot
+        elif rank[xroot] > rank[yroot]:
+            parent[yroot] = xroot
+        else:
+            parent[yroot] = xroot
+            rank[xroot] += 1
+    def KruskalMST(self):
+        result = [] # This will store the resultant MST
+        i = 0
+        e = 0
+        self.graph = sorted(self.graph,
+        key=lambda item: item[2])
+        parent = []
+        rank = []
+        for node in range(self.V):
+            parent.append(node)
+            rank.append(0)
+        while e < self.V - 1:
+            u, v, w = self.graph[i]
+            i = i + 1
+            x = self.find(parent, u)
+            y = self.find(parent, v)
+            if x != y:
+                e = e + 1
+                result.append([u, v, w])
+                self.union(parent, rank, x, y)
+        minimumCost = 0
+        print ("Edges in the constructed MST")
+        for u, v, weight in result:
+            minimumCost += weight
+            print("%d -- %d == %d" % (u, v, weight))
+        print("Minimum Spanning Tree" , minimumCost)
 g = Graph(4)
 g.addEdge(0, 1, 10)
 g.addEdge(0, 2, 6)
@@ -56,6 +56,7 @@ g.KruskalMST()
 
 
 
+________________________________________
 🔷 Importing Libraries
 from collections import defaultdict
 •	Imports defaultdict (though unused here) from the collections module. Useful when dealing with graphs, but not essential in this implementation.
@@ -81,9 +82,31 @@ ________________________________________
         if parent[i] == i:
             return i
         return self.find(parent, parent[i])
-•	Part of the Disjoint Set Union (DSU).
-•	Recursively finds the representative/root of a set that vertex i belongs to.
-•	Helps detect cycles by checking whether two vertices are in the same set.
+Sure! Let's break down this find() function line by line — it's used in the Disjoint Set Union (DSU) or Union-Find data structure.
+________________________________________
+🔧 Function Definition
+def find(self, parent, i):
+•	This defines a method find that takes:
+o	parent: a list where parent[i] tells you the parent (or root) of element i.
+o	i: the element whose set representative (or "root") you want to find.
+•	self means it's a method inside a class (usually a graph class).
+________________________________________
+🧠 Purpose
+The purpose of find() is to determine the representative (or root) of the set to which element i belongs.
+This helps:
+•	Check if two elements are in the same set.
+•	Avoid cycles in algorithms like Kruskal's MST.
+________________________________________
+🔍 Line-by-Line Explanation
+if parent[i] == i:
+    return i
+•	Base case: If i is its own parent, then i is the root of its set.
+•	So we return i.
+________________________________________
+return self.find(parent, parent[i])
+•	If i is not its own parent, it means we haven't reached the root yet.
+•	We recursively call find() on parent[i] to keep going up the tree until we find the root.
+•	This continues until we hit the base case
 ________________________________________
 🔷 Union Method (DSU Union by Rank)
     def union(self, parent, rank, x, y):
@@ -97,7 +120,32 @@ ________________________________________
         else:
             parent[yroot] = xroot
             rank[xroot] += 1
-•	Unites the two sets by attaching the smaller tree under the larger one (using rank to optimize performance).
+•	________________________________________def union(self, parent, rank, x, y):
+•	This function merges the sets that contain elements x and y.
+•	parent[]: Tracks the parent (or root) of each node.
+•	rank[]: Approximates the depth (or height) of each tree to optimize merging.
+•	The goal is to attach the shorter tree under the taller one to keep trees shallow.
+•	________________________________________xroot = self.find(parent, x)
+•	yroot = self.find(parent, y)
+•	Find the root of the set containing x and the root of the set containing y.
+•	We use the find() function to get these roots.
+•	We only want to merge roots, not arbitrary nodes.
+•	________________________________________
+•	if rank[xroot] < rank[yroot]:
+•	    parent[xroot] = yroot
+•	If the tree rooted at xroot is shorter, attach it under yroot.
+•	This avoids increasing the tree height unnecessarily.
+•	________________________________________
+•	elif rank[xroot] > rank[yroot]:
+•	    parent[yroot] = xroot
+•	If the tree rooted at yroot is shorter, attach it under xroot.
+•	________________________________________
+•	else:
+•	    parent[yroot] = xroot
+•	    rank[xroot] += 1
+•	If both trees have the same rank:
+•	Pick one arbitrarily (here, xroot) to be the new root.
+•	Increase its rank by 1 since its height increases.
 ________________________________________
 🔷 Kruskal’s MST Function
     def KruskalMST(self):
@@ -113,32 +161,49 @@ ________________________________________
             parent.append(node)
             rank.append(0)
 •	Initializes parent and rank arrays for DSU (each node is initially its own parent).
+while e < self.V - 1:
+•	The MST must have exactly V - 1 edges, where V is the number of vertices.
+•	e is a counter for how many edges we've added to the MST so far.
 ________________________________________
-🔷 Building MST
-        while e < self.V - 1:
-            u, v, w = self.graph[i]
-            i = i + 1
-•	Loops until MST has exactly V-1 edges.
-•	Picks next lightest edge (u, v, w).
-            x = self.find(parent, u)
-            y = self.find(parent, v)
-•	Finds which set u and v belong to.
-            if x != y:
-                e = e + 1
-                result.append([u, v, w])
-                self.union(parent, rank, x, y)
-•	If u and v are in different sets (no cycle), include the edge in MST and union their sets.
+u, v, w = self.graph[i]
+i = i + 1
+•	self.graph[i] is a tuple (u, v, w) representing an edge:
+o	u and v are the two vertices.
+o	w is the weight of the edge.
+•	i is the index of the current edge being processed — edges are assumed to be sorted by weight.
 ________________________________________
-🔷 Display Result
-        minimumCost = 0
-        print ("Edges in the constructed MST")
-        for u, v, weight in result:
-            minimumCost += weight
-            print("%d -- %d == %d" % (u, v, weight))
-•	Prints all MST edges and accumulates the total cost.
-        print("Minimum Spanning Tree" , minimumCost)
-•	Displays the total weight (cost) of the MST.
+x = self.find(parent, u)
+y = self.find(parent, v)
+•	Find the set representatives (roots) of u and v using the find() function.
+•	This is to check if adding the edge would form a cycle.
 ________________________________________
+if x != y:
+•	If u and v are in different sets, adding the edge won’t form a cycle, so it's safe to add.
+________________________________________
+    e = e + 1
+    result.append([u, v, w])
+    self.union(parent, rank, x, y)
+•	Increase the edge count.
+•	Add the edge to the result list.
+•	Merge the sets of u and v using union() to update the disjoint set.
+________________________________________
+📊 Printing the MST
+minimumCost = 0
+print("Edges in the constructed MST")
+for u, v, weight in result:
+    minimumCost += weight
+    print("%d -- %d == %d" % (u, v, weight))
+•	Iterate over all edges in the MST.
+•	Print them in the format: u -- v == weight.
+•	Accumulate the total weight in minimumCost.
+________________________________________
+print("Minimum Spanning Tree", minimumCost)
+•	Final print showing the total weight of the MST.
+________________________________________
+📌 Initialization
+g = Graph(4)
+•	This creates a graph object g with 4 vertices.
+•	Later you would need to add edges to g.graph before calling Kruskal's method.
 🔷 Driver Code
 g = Graph(4)
 g.addEdge(0, 1, 10)
