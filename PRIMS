@@ -1,0 +1,305 @@
+import sys # Library for INT_MAX
+class Graph():
+    def __init__(self, vertices):
+        self.V = vertices
+        self.graph = [[0 for column in range(vertices)]
+                    for row in range(vertices)]
+    def printMST(self, parent):
+        print ("Edge \tWeight")
+        for i in range(1, self.V):
+            print (parent[i], "-", i, "\t", self.graph[i][parent[i]])
+    def minKey(self, key, mstSet):
+        min = sys.maxsize
+        for v in range(self.V):
+            if key[v] < min and mstSet[v] == False:
+                min = key[v]
+                min_index = v
+        return min_index
+    def primMST(self):
+        key = [sys.maxsize] * self.V
+        parent = [None] * self.V # Array to store constructed MST
+        key[0] = 0
+        mstSet = [False] * self.V
+        parent[0] = -1 # First node is always the root of
+        for cout in range(self.V):
+            u = self.minKey(key, mstSet)
+            mstSet[u] = True
+            for v in range(self.V):
+                if self.graph[u][v] > 0 and mstSet[v] == False and key[v] > self.graph[u][v]:
+                        key[v] = self.graph[u][v]
+                        parent[v] = u
+
+        self.printMST(parent)
+g = Graph(5)
+g.graph = [ [0, 2, 0, 6, 0],
+            [2, 0, 3, 8, 5],
+            [0, 3, 0, 0, 7],
+            [6, 8, 0, 0, 9],
+            [0, 5, 7, 9, 0]]
+
+g.primMST();
+
+________________________________________
+Importing Libraries
+import sys  # Library for INT_MAX
+•	sys.maxsize is used as a substitute for infinity (like INT_MAX in C/C++) to initialize the keys with a very large value.
+________________________________________
+Class Definition
+class Graph():
+•	Defines a Graph class to represent a graph using an adjacency matrix.
+________________________________________
+Constructor: __init__
+	def __init__(self, vertices):
+		self.V = vertices
+		self.graph = [[0 for column in range(vertices)] for row in range(vertices)]
+•	__init__ is the constructor which initializes:
+o	self.V: Number of vertices.
+o	self.graph: A 2D matrix initialized with 0s representing the weights of edges between vertices. graph[i][j] will store the weight of edge from vertex i to j.
+________________________________________
+Printing MST
+	def printMST(self, parent):
+		print ("Edge \tWeight")
+		for i in range(1, self.V):
+			print (parent[i], "-", i, "\t", self.graph[i][parent[i]])
+•	This function prints the edges in the MST and their weights.
+•	The parent array contains the parent of each vertex in the MST. Loop starts from 1 because the root (0) has no parent.
+•	Certainly! The method printMST(self, parent) is designed to print the Minimum Spanning Tree (MST) of a graph, typically after applying Prim's algorithm. Here's the line-by-line explanation:
+•	________________________________________
+•	def printMST(self, parent):
+•	This defines a method named printMST inside a class (likely a Graph class).
+•	It takes two parameters:
+•	self: refers to the instance of the class.
+•	parent: a list or array where parent[i] stores the parent node of vertex i in the MST.
+•	________________________________________
+•	print("Edge \tWeight")
+•	This prints the header for the output table.
+•	\t inserts a tab space, so the output looks like:
+•	Edge     Weight
+•	________________________________________
+•	for i in range(1, self.V):
+•	This loops through all vertices, starting from index 1 up to self.V - 1 (i.e., excludes vertex 0).
+•	It's common to skip vertex 0 because it's usually chosen as the starting point of the MST.
+•	________________________________________
+•	print(parent[i], "-", i, "\t", self.graph[i][parent[i]])
+•	This line prints each edge in the MST and its weight:
+•	parent[i]: the parent node of vertex i.
+•	"-": a dash to visually show the edge, like 0 - 1.
+•	i: the current vertex.
+•	"\t": tab space for alignment.
+•	self.graph[i][parent[i]]: the weight of the edge between i and its parent, looked up in the adjacency matrix graph.
+
+________________________________________
+Finding Minimum Key
+	def minKey(self, key, mstSet):
+		min = sys.maxsize
+		for v in range(self.V):
+			if key[v] < min and mstSet[v] == False:
+				min = key[v]
+				min_index = v
+		return min_index
+Sure! The function minKey(self, key, mstSet) is a helper method commonly used in Prim's algorithm to select the next vertex to include in the Minimum Spanning Tree (MST). Let's explain it line by line:
+________________________________________
+def minKey(self, key, mstSet):
+•	This defines a method called minKey within a class (usually Graph).
+•	It takes:
+o	self: the instance of the class.
+o	key: a list where key[v] holds the minimum weight edge connecting vertex v to the MST so far.
+o	mstSet: a boolean list where mstSet[v] is True if vertex v is already included in the MST, otherwise False.
+________________________________________
+min = sys.maxsize
+•	Initializes a variable min to a very large number (maximum integer value), so any real edge weight will be smaller.
+•	Used to find the minimum among all eligible key[v] values.
+________________________________________
+for v in range(self.V):
+•	Iterates over all vertices v in the graph.
+•	self.V is the number of vertices in the graph.
+________________________________________
+if key[v] < min and mstSet[v] == False:
+•	Checks two conditions:
+1.	key[v] < min: we are looking for the smallest key value.
+2.	mstSet[v] == False: vertex v must not yet be included in the MST.
+•	This ensures we only consider vertices not yet in the MST.
+________________________________________
+min = key[v]
+•	If both conditions are satisfied, update min to key[v].
+________________________________________
+min_index = v
+•	Also store the index v where the minimum key was found.
+•	This tells us which vertex to include next in the MST.
+________________________________________
+return min_index
+•	After the loop finishes, returns the index of the vertex with the minimum key value that’s not yet in the MST.
+•	This vertex will be picked next for inclusion in the MST.
+________________________________________
+Prim’s MST Algorithm
+	def primMST(self):
+		key = [sys.maxsize] * self.V
+•	Initialize all key values to infinity (like INT_MAX).
+		parent = [None] * self.V
+•	parent[i] stores the parent of vertex i in the MST.
+		key[0] = 0
+•	Start from the first vertex (vertex 0), so set its key to 0.
+		mstSet = [False] * self.V
+•	Boolean array to mark vertices included in MST.
+		parent[0] = -1
+•	The first vertex is the root of the MST, so it has no parent.
+________________________________________
+Main Loop
+		for cout in range(self.V):
+•	Loop runs V times to include all vertices in MST.
+			u = self.minKey(key, mstSet)
+•	Pick the vertex u not in MST with the minimum key value.
+			mstSet[u] = True
+•	Include vertex u in MST.
+________________________________________
+Update Keys and Parents
+			for v in range(self.V):
+				if self.graph[u][v] > 0 and mstSet[v] == False and key[v] > self.graph[u][v]:
+						key[v] = self.graph[u][v]
+						parent[v] = u
+•	For every adjacent vertex v of u:
+o	If an edge exists (graph[u][v] > 0),
+o	Vertex v is not yet included in MST (mstSet[v] == False),
+o	And current key of v is greater than edge weight from u to v,
+o	Then update key and parent of v.
+________________________________________
+Print Final MST
+		self.printMST(parent)
+•	After building MST, print all edges and their weights.
+________________________________________
+Main Code
+g = Graph(5)
+•	Create a graph object with 5 vertices.
+g.graph = [ [0, 2, 0, 6, 0],
+			[2, 0, 3, 8, 5],
+			[0, 3, 0, 0, 7],
+			[6, 8, 0, 0, 9],
+			[0, 5, 7, 9, 0]]
+•	Define the adjacency matrix of the graph with weights. 0 means no edge between vertices.
+g.primMST();
+•	Call the function to generate and print the MST using Prim’s Algorithm.
+________________________________________
+Sample Output Explanation
+For the given graph, the output will look like:
+Edge    Weight
+0 - 1    2
+1 - 2    3
+0 - 3    6
+1 - 4    5
+This means the MST includes:
+•	Edge between 0-1 with weight 2
+•	Edge between 1-2 with weight 3
+•	Edge between 0-3 with weight 6
+•	Edge between 1-4 with weight 5
+________________________________________
+✅ Basic Concept Questions
+1.	Q: What is Prim’s Algorithm?
+A: Prim’s Algorithm is a greedy algorithm that finds the Minimum Spanning Tree (MST) for a connected weighted graph. It starts from a vertex and continuously adds the smallest possible edge that connects a new vertex to the tree.
+2.	Q: What is a Minimum Spanning Tree (MST)?
+A: MST is a subset of the edges of a connected, weighted graph that connects all vertices with the minimum possible total edge weight and without any cycles.
+3.	Q: What is the time complexity of Prim’s Algorithm?
+A:
+o	Using an adjacency matrix and a linear search (minKey): O(V²)
+o	Using a priority queue with adjacency list: O(E log V) (more efficient)
+________________________________________
+✅ Code-Specific Questions
+4.	Q: What is the purpose of the minKey() function?
+A: It finds the index of the vertex with the minimum key value that has not yet been included in the MST (i.e., not in mstSet).
+5.	Q: Why is sys.maxsize used in the key[] array?
+A: It initializes the keys with a very large value (like infinity) to ensure any edge weight is smaller, allowing proper updates.
+6.	Q: What do the key[], parent[], and mstSet[] arrays represent?
+A:
+o	key[]: Minimum weight edge to connect a vertex to the MST.
+o	parent[]: Stores the parent node to print the MST later.
+o	mstSet[]: Boolean array that tracks whether a vertex is included in the MST.
+7.	Q: Why is the parent of vertex 0 set to -1?
+A: Because vertex 0 is considered the starting/root node of the MST, and it has no parent.
+8.	Q: How are edges represented in the graph?
+A: The graph is represented using a 2D adjacency matrix, where graph[i][j] stores the weight of the edge between vertex i and j.
+9.	Q: What condition checks whether to update the key of a vertex?
+A:
+10.	if self.graph[u][v] > 0 and mstSet[v] == False and key[v] > self.graph[u][v]
+This checks that there is an edge (>0), the vertex is not yet in MST, and the current edge is smaller than the existing key.
+________________________________________
+✅ Understanding Output
+10.	Q: What does the final output of printMST() show?
+A: It shows the edges included in the MST along with their respective weights.
+11.	Q: Why does the loop in printMST() start from 1?
+A: Because the root node (vertex 0) has no parent, so it is excluded from the printed MST edge list.
+________________________________________
+✅ Conceptual Follow-ups
+12.	Q: Can Prim’s algorithm work on disconnected graphs?
+A: No, it only works on connected graphs. If the graph is disconnected, MST is not defined.
+13.	Q: How is Prim’s different from Kruskal’s Algorithm?
+A:
+•	Prim’s grows MST from a starting node by adding the smallest adjacent edge.
+•	Kruskal’s adds the globally smallest edge (anywhere) and uses union-find to avoid cycles.
+14.	Q: Can the graph have negative weights in Prim’s?
+A: Yes, as long as the graph is connected and weights are real numbers, negative weights are allowed in MST algorithms.
+________________________________________
+Here are likely oral exam/viva questions based on your Greedy Search Algorithm topic, particularly with applications like Prim’s and Kruskal’s Minimum Spanning Tree algorithms, along with sample answers:
+________________________________________
+✅ General Greedy Algorithm Questions
+1.	Q: What is a Greedy Algorithm?
+A: A greedy algorithm builds up a solution step by step, always choosing the locally optimal choice at each step, with the hope of reaching a global optimum.
+2.	Q: What type of problems is the Greedy approach used for?
+A: It is used for optimization problems, where the goal is to maximize or minimize a particular value, such as cost, time, or distance.
+3.	Q: What are the characteristics of a greedy method?
+A:
+o	Builds solution step-by-step
+o	Makes the best local choice at each step
+o	Does not reconsider decisions
+o	May or may not result in the global optimal solution
+4.	Q: What are the components of a greedy algorithm?
+A:
+o	Candidate set
+o	Selection function
+o	Feasibility function
+o	Objective function
+o	Solution function
+________________________________________
+✅ Prim’s and Kruskal’s MST Related
+5.	Q: Why are Prim’s and Kruskal’s algorithms considered greedy?
+A: Both build the minimum spanning tree by always picking the lowest weight edge at each step that doesn't form a cycle (Kruskal) or that connects a new vertex to the tree (Prim).
+6.	Q: What is the main difference between Prim’s and Kruskal’s algorithm?
+A:
+o	Prim’s works like Dijkstra’s algorithm, starting from a node and growing the MST.
+o	Kruskal’s sorts all edges by weight and adds them one by one (using union-find to avoid cycles), regardless of the starting node.
+7.	Q: When would you prefer Kruskal’s over Prim’s?
+A:
+o	Kruskal’s is better for sparse graphs (fewer edges).
+o	Prim’s is more efficient for dense graphs (many edges), especially with an adjacency matrix and min-heap.
+8.	Q: What data structures are used in Prim’s and Kruskal’s algorithms?
+A:
+o	Prim’s: Uses arrays (or a priority queue/min-heap)
+o	Kruskal’s: Uses Disjoint Set Union (DSU) or Union-Find
+________________________________________
+✅ Conceptual and Application Questions
+9.	Q: Does the greedy algorithm always give an optimal solution?
+A: No. It only works when the problem has the greedy-choice property and optimal substructure, like in MST problems.
+10.	Q: What is the Greedy Choice Property?
+A: It means that choosing the local optimal choice at each step leads to the global optimal solution.
+11.	Q: What is Optimal Substructure?
+A: A problem has optimal substructure if an optimal solution to the problem contains optimal solutions to its subproblems.
+________________________________________
+✅ Real-world Applications
+12.	Q: Name some real-world applications of greedy algorithms.
+A:
+•	Minimum Spanning Trees (network design)
+•	Dijkstra’s algorithm (shortest path)
+•	Huffman coding (data compression)
+•	Job scheduling
+•	Fractional Knapsack problem
+13.	Q: Can Greedy algorithms be used for NP-complete problems?
+A: They can be used to find approximate solutions for NP-complete problems (e.g., Traveling Salesman Problem), but not always optimal.
+________________________________________
+ALGORITHM
+•	Start with any vertex (usually vertex 0).
+•	Maintain a key[] array to track the minimum edge weight to reach each vertex.
+•	Use mstSet[] to track which vertices are already included in the MST.
+•	In each step:
+•	Pick the vertex u not in mstSet with the smallest key[u].
+•	Include u in the MST.
+•	Update the key[] and parent[] of its adjacent vertices.
+•	Repeat until all vertices are included.
+
