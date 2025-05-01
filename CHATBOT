@@ -1,0 +1,211 @@
+CHATBOT
+# Import required library
+import random
+# Define chatbot responses for customer queries
+responses = {
+    "hi": ["Hello! Welcome to ShopEase. How can I help you today?"],
+    "hello": ["Hi there! How may I assist you at ShopEase?"],
+    "store hours": ["Our store is open from 9 AM to 9 PM, Monday through Saturday."],
+    "order status": ["You can check your order status by logging into your account on our website."],
+    "return policy": ["We offer a 30-day return policy with a full refund if the item is unused and in original packaging."],
+    "contact": ["You can reach our support team at support@shopease.com or call 1800-123-456."],
+    "bye": ["Goodbye! Thank you for visiting ShopEase."],
+    "default": [
+        "I'm sorry, I didn't understand that. Could you please rephrase?",
+        "Hmm, I couldn't catch that. Try asking about store hours, return policy, or contact info."
+    ]
+}
+# Function to get the chatbot's response
+def get_bot_response(user_message):
+    return random.choice(responses.get(user_message, responses["default"]))
+# Start the chatbot conversation
+print("Welcome to ShopEase Customer Support Chatbot!")
+print("You can ask about 'store hours', 'order status', 'return policy', or 'contact'.")
+print("Type 'bye' to end the conversation.\n")
+# Chat loop
+while True:
+    user_message = input("You: ").lower()
+    if user_message == "bye":
+        print("Bot:", random.choice(responses["bye"]))
+        break
+    else:
+        print("Bot:", get_bot_response(user_message))
+
+Here's a detailed line-by-line explanation of the provided ShopEase Customer Support Chatbot code:
+________________________________________
+import random
+•	This line imports Python's built-in random module.
+•	It's used to select a random response from a list (so the chatbot can give varied replies).
+________________________________________
+responses = {
+    "hi": ["Hello! Welcome to ShopEase. How can I help you today?"],
+    "hello": ["Hi there! How may I assist you at ShopEase?"],
+    "store hours": ["Our store is open from 9 AM to 9 PM, Monday through Saturday."],
+    "order status": ["You can check your order status by logging into your account on our website."],
+    "return policy": ["We offer a 30-day return policy with a full refund if the item is unused and in original packaging."],
+    "contact": ["You can reach our support team at support@shopease.com or call 1800-123-456."],
+    "bye": ["Goodbye! Thank you for visiting ShopEase."],
+    "default": [
+        "I'm sorry, I didn't understand that. Could you please rephrase?",
+        "Hmm, I couldn't catch that. Try asking about store hours, return policy, or contact info."
+    ]
+}
+•	This is a dictionary named responses that stores possible user inputs as keys (e.g., "hi", "store hours").
+•	Each key maps to a list of possible bot replies.
+•	The "default" key is used when the user input doesn't match any known keyword — it provides fallback responses.
+________________________________________
+def get_bot_response(user_message):
+    return random.choice(responses.get(user_message, responses["default"]))
+•	This defines a function get_bot_response that takes user_message as input.
+•	It looks for the message in the responses dictionary.
+o	If found, it returns a random reply from the corresponding list.
+o	If not found, it uses the "default" list to choose a fallback response.
+________________________________________
+print("Welcome to ShopEase Customer Support Chatbot!")
+print("You can ask about 'store hours', 'order status', 'return policy', or 'contact'.")
+print("Type 'bye' to end the conversation.\n")
+•	These lines display instructions to the user when the chatbot starts.
+•	They tell the user what kind of questions the chatbot can answer.
+________________________________________
+while True:
+•	Starts an infinite loop that keeps the conversation going until the user types "bye".
+________________________________________
+    user_message = input("You: ").lower()
+•	Takes input from the user.
+•	.lower() converts it to lowercase so that case (e.g., "Hi" vs "hi") doesn't affect matching.
+________________________________________
+    if user_message == "bye":
+        print("Bot:", random.choice(responses["bye"]))
+        break
+•	If the user types "bye":
+o	The bot prints a goodbye message by selecting from the "bye" responses.
+o	The loop is terminated using break.
+________________________________________
+    else:
+        print("Bot:", get_bot_response(user_message))
+•	For any input other than "bye":
+o	The chatbot calls get_bot_response to find an appropriate response.
+o	Then, it prints the bot’s reply.
+________________________________________
+Summary:
+This is a basic rule-based chatbot that matches predefined keywords to respond. It uses random selection for slight variation in replies and a fallback message for unknown inputs.
+
+
+
+
+•	Use of a chatbot?
+ Used to answer queries, give support, and automate conversations. Chatbots automate responses to user queries like in customer support or virtual assistants. 
+•	Explain dialog flow. 
+It is how a chatbot understands, processes, and responds to users. Includes intents, entities, and responses.
+Dialog flow is a platform to build chatbots that understand user input using NLP(Natural language processing) and provide responses.
+•	Requirements to develop a chatbot: 
+1. NLP Engine: Understands and processes human language (e.g., recognizing intent, extracting info). 
+2. User Interface: The front-end where users interact with the chatbot (like a chat window on a website or app). 
+3. Backend System: Handles logic, manages workflows, and connects everything together behind the scenes.
+ 4. Database: Stores user data, chat history, and other information the bot needs to work properly.
+
+•	How do you evaluate chatbot performance? 
+Using accuracy, response time, user satisfaction, fallback rates,Task completion rate 
+•	How to improve chatbot accuracy?
+1.	Use more training data 2. Refine intents and entities 3. Add fallback messages and context
+
+🔹 1. What is the purpose of this chatbot?
+Answer Tip:
+To simulate a basic customer support assistant that can respond to common queries like store hours, order status, return policy, and contact info using simple keyword matching.
+________________________________________
+🔹 2. Why did you use the random module?
+Answer Tip:
+To make the chatbot more dynamic by selecting a random response from a list of predefined replies for each query. This prevents repetitive responses.
+________________________________________
+🔹 3. What does the responses.get(user_message, responses["default"]) line do?
+Answer Tip:
+It looks for the user's message in the dictionary. If the message is not found, it returns the default response.
+________________________________________
+🔹 4. Why do you convert user_message to lowercase?
+Answer Tip:
+To make input matching case-insensitive. For example, "Hello", "HELLO", and "hello" should all be treated the same.
+________________________________________
+🔹 5. What kind of data structure is responses and why is it used?
+Answer Tip:
+It is a dictionary that maps keywords to a list of responses. It allows fast lookups and easy mapping of user input to responses.
+________________________________________
+🔹 6. How does the chatbot know when to end the conversation?
+Answer Tip:
+The program checks if the input is "bye" and uses break to exit the while True loop.
+________________________________________
+🔹 7. Can this chatbot understand full sentences like “Can you tell me your return policy?”?
+Answer Tip:
+No, it only matches exact keywords like "return policy". It does not use Natural Language Processing (NLP).
+________________________________________
+🔹 8. How can this chatbot be improved?
+Answer Tip (suggest 2–3):
+•	Add NLP (e.g., using spaCy or NLTK) to understand full sentences.
+•	Use a GUI or web interface.
+•	Connect to a real-time database for dynamic responses.
+________________________________________
+🔹 9. What is the role of random.choice()?
+Answer Tip:
+It randomly picks one response from a list, making the bot's replies feel less robotic and more varied.
+________________________________________
+🔹 10. What happens if the user types something not listed in the dictionary?
+Answer Tip:
+The chatbot returns a default message like “I didn’t understand that” by accessing the "default" key.
+________________________________________
+✅ General Understanding
+1.	What does this Python program do?
+→ It's a basic keyword-based chatbot for a customer support system (e.g., ShopEase).
+2.	What is the real-world use case of this chatbot?
+→ It's used to assist customers with FAQs like store hours, return policy, and contact info.
+________________________________________
+📚 Python Concepts
+3.	Why is random imported in the code?
+→ To randomly choose a response from the list of replies using random.choice().
+4.	What is the data type of the responses variable?
+→ It's a Python dictionary (dict) mapping keywords to a list of response strings.
+5.	What happens if the user enters something not present in the dictionary?
+→ The chatbot responds with a message from the "default" list.
+________________________________________
+🔄 Program Flow / Logic
+6.	What is the role of the while True loop?
+→ It keeps the conversation going until the user types "bye".
+7.	How does the chatbot know when to stop?
+→ It checks if the user's message is "bye", then exits the loop using break.
+8.	Why is .lower() used with user input?
+→ To make the chatbot case-insensitive, so “Hi” and “hi” are treated the same.
+________________________________________
+🧠 Functions & Responses
+9.	Explain the purpose of the get_bot_response() function.
+→ It checks if the user input matches a known keyword and returns a random response from the corresponding list, or from "default" if not found.
+10.	Why are multiple responses given for some inputs (like default)?
+→ To add variety and avoid repetitive responses, making the bot feel more human-like.
+________________________________________
+🛠️ Improvement / Application
+11.	How could you make this chatbot smarter?
+→ Add NLP (like spaCy), sentence matching, or integrate it with a database or web frontend.
+12.	Can this chatbot understand full questions like “What is your return policy?”?
+→ No, it only recognizes exact keywords (e.g., "return policy").
+________________________________________
+•	Theory:
+Artificial intelligence chatbots are text- or voice-based interfaces that provide support and
+connect human users with the services or information they need by simulating a traditional
+person-to-person conversation. Text-based chatbots are often deployed online on websites and
+social media platforms to provide customer support and outreach. Voice-based chatbots, on the
+other hand, are most typically used for call deflection and sorting or over-the-phone customer
+service. Most smartphones come equipped with a built-in chatbot, and smart speakers with
+chatbot functionality have been trendy gift-giving items for several years. The most typical
+chatbot interaction occurs on a business site. These customer service bots usually pop up after a
+human user navigates around a site for a few minutes or exhibits behaviors that show that they
+have become “lost” or are having trouble connecting with the information they need. Once the
+chatbot window presents itself, the user can enter their question in plain, syntactical English. The
+bot’s language recognition functions break down the question and, at the speed of light,
+compares the query to its data bank of previously asked questions to look for ways customers
+have achieved satisfying results in similar situations. When that search is complete, the chatbot
+shares the best and most relevant information with the user.
+•	Applications
+Chatbots are valuable for both businesses and consumers, as they reduce barriers to data access
+created by everything from physical disability to tech savviness, streamline navigation to connect users
+with results as quickly as possible, and provide a cost-effective alternative to staffing massive numbers of
+support professionals or contracting with expensive call centers. In fact, in many scenarios, artificial
+intelligence chatbot services can actually provide a faster, more straightforward experience than dealing
+with a human professional. If that sounds too good to be true, here are some examples of ways AI-based
+chatbots are deployed every day
