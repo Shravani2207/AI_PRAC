@@ -1,0 +1,349 @@
+from collections import deque
+class Graph:
+    def __init__(self, vertices):
+        self.vertices = vertices  # number of vertices
+        self.graph = {i: [] for i in range(vertices)}  # adjacency list
+    # Function to add an edge to the graph (since it's undirected, we add both directions)
+    def addEdge(self, u, v):
+        self.graph[u].append(v)
+        self.graph[v].append(u)
+    def DFSRecursive(self, v, visited):
+        # Mark the current node as visited
+        visited.add(v)
+        print(v, end=' ')
+        for neighbour in self.graph[v]:
+            if neighbour not in visited:
+                self.DFSRecursive(neighbour, visited)
+    def DFS(self, start):
+        visited = set()  # To store visited vertices
+        print("DFS Traversal starting from vertex", start)
+        self.DFSRecursive(start, visited)
+    def BFS(self, start):
+        visited = [False] * self.vertices  # To store visited vertices
+        queue = deque([start])  # Queue to hold nodes to explore
+        visited[start] = True
+        print("\nBFS Traversal starting from vertex", start)
+        while queue:
+            vertex = queue.popleft()
+            print(vertex, end=' ')
+            for neighbour in self.graph[vertex]:
+                if not visited[neighbour]:
+                    queue.append(neighbour)
+                    visited[neighbour] = True
+g = Graph(5)  # Create a graph with 5 vertices (0-4)
+g.addEdge(0, 1)
+g.addEdge(0, 2)
+g.addEdge(1, 2)
+g.addEdge(2, 3)
+g.addEdge(3, 4)
+g.DFS(0)
+g.BFS(0)
+
+
+1. What are the commonly used uninformed search algorithms?
+•	The commonly used uninformed search algorithms are:
+o	Depth-First Search (DFS)
+o	Breadth-First Search (BFS)
+o	Uniform Cost Search (UCS)
+Uninformed search algorithms don't have any additional information about the goal (such as heuristics) and explore the search space based solely on the structure of the graph or tree.
+2. Which data structure is used in BFS?
+•	Queue is the data structure used in Breadth-First Search (BFS).
+•	BFS follows a First-In-First-Out (FIFO) strategy, where nodes are processed in the order they are discovered. The queue holds the nodes to be explored next and ensures that nodes at the current depth level are explored before moving on to the next level.
+3. Which data structure is used in DFS?
+•	Stack (or recursion in its recursive form) is used in Depth-First Search (DFS).
+•	DFS follows a Last-In-First-Out (LIFO) strategy, where it explores as far down a branch as possible before backtracking. The stack keeps track of the nodes to be explored, ensuring that the most recently discovered node is processed next.
+4. What is the performance measure for DFS and BFS?
+•	The performance measures for DFS and BFS are:
+o	Time Complexity:
+	For both DFS and BFS, the time complexity is O(V + E), where V is the number of vertices (nodes) and E is the number of edges in the graph. This is because both algorithms visit each node and edge at most once during traversal.
+o	Space Complexity:
+	DFS: The space complexity for DFS is O(n), where n is the depth of the tree or graph (since it uses a stack to store nodes). In the worst case, it can go as deep as the number of nodes.
+	BFS: The space complexity for BFS is O(n) as well, where n is the number of nodes at the current depth level, since it uses a queue to store nodes yet to be explored. In the worst case, BFS may need to store all nodes at a given depth level before moving to the next level.
+o	Completeness:
+	DFS: DFS is complete if the search tree is finite. It guarantees a solution if one exists.
+	BFS: BFS is complete for finite graphs, as it will always find a solution if one exists (since it explores all nodes at a level before moving to the next).
+o	Optimality:
+	DFS: DFS is not optimal, meaning it does not guarantee the shortest path, especially in graphs with multiple paths.
+	BFS: BFS is optimal if all edges have the same cost, as it will always find the shortest path in an unweighted graph.
+______________________________________________________________________________
+1. Import Required Module
+from collections import deque
+•	Imports deque from the collections module.
+•	deque is used to efficiently implement a queue (for BFS).
+________________________________________
+2. Define the Graph Class
+class Graph:
+•	Defines a class named Graph to represent an undirected graph.
+________________________________________
+3. Graph Constructor
+    def __init__(self, vertices):
+        self.vertices = vertices  # number of vertices
+        self.graph = {i: [] for i in range(vertices)}  # adjacency list
+•	vertices is the total number of vertices in the graph.
+•	self.graph creates an adjacency list, where each key (vertex) maps to a list of its neighbors.
+Example if vertices = 5:
+{0: [], 1: [], 2: [], 3: [], 4: []}
+________________________________________
+4. Add Edge Function
+    def addEdge(self, u, v):
+        self.graph[u].append(v)
+        self.graph[v].append(u)
+•	Adds an undirected edge between nodes u and v.
+•	That means both u → v and v → u are added to the adjacency list.
+________________________________________
+5. Recursive DFS Helper Function
+    def DFSRecursive(self, v, visited):
+        visited.add(v)
+        print(v, end=' ')
+•	Marks vertex v as visited.
+•	Prints the current vertex.
+        for neighbour in self.graph[v]:
+            if neighbour not in visited:
+                self.DFSRecursive(neighbour, visited)
+•	For each neighbor of v, if it hasn't been visited, recursively call DFS.
+________________________________________
+6. DFS Traversal Entry Point
+    def DFS(self, start):
+        visited = set()
+        print("DFS Traversal starting from vertex", start)
+        self.DFSRecursive(start, visited)
+•	Initializes a visited set.
+•	Calls the recursive helper DFSRecursive to begin traversal from the start vertex.
+________________________________________
+7. BFS Traversal Function
+    def BFS(self, start):
+        visited = [False] * self.vertices
+        queue = deque([start])
+        visited[start] = True
+•	Initializes a boolean list visited[] of size vertices, all set to False.
+•	A queue is created with the start node and marked as visited.
+        print("\nBFS Traversal starting from vertex", start)
+        while queue:
+            vertex = queue.popleft()
+            print(vertex, end=' ')
+•	While the queue isn't empty:
+o	Dequeue a vertex.
+o	Print it.
+            for neighbour in self.graph[vertex]:
+                if not visited[neighbour]:
+                    queue.append(neighbour)
+                    visited[neighbour] = True
+•	For each unvisited neighbor of the current vertex:
+o	Enqueue it.
+o	Mark it as visited.
+________________________________________
+8. Create and Connect the Graph
+g = Graph(5)
+•	Creates a graph with 5 vertices (0 through 4).
+g.addEdge(0, 1)
+g.addEdge(0, 2)
+g.addEdge(1, 2)
+g.addEdge(2, 3)
+g.addEdge(3, 4)
+•	Adds edges to the graph to create these connections:
+•	0—1
+•	| \
+•	2—3—4
+________________________________________
+9. Perform DFS and BFS
+g.DFS(0)
+•	Starts DFS from vertex 0.
+g.BFS(0)
+•	Starts BFS from vertex 0.
+________________________________________
+🔄 Sample Output
+Given the edges and starting from vertex 0, the traversal would look like:
+•	DFS (Depth-first): 0 1 2 3 4 (depending on recursion order)
+•	BFS (Breadth-first): 0 1 2 3 4
+________________________________________
+Would you like a diagram showing how the graph looks or a PDF version of this explanation?
+Differentiate between DFS and BFS Algorithms.
+ DFS (Depth First Search) explores as far as possible along each branch before backtracking. DFS explores deep paths using stack, 
+BFS (Breadth First Search) explores all the nodes at the present depth level before moving on to the nodes at the next depth level. BFS explores level-wise using queue.
+
+Write down the Time and Space Complexity of DFS and BFS. 
+● DFS: Time – O(V + E), Space – O(V) 
+● BFS: Time – O(V + E), Space – O(V) Where V = vertices, E = edges 
+3. Which data structure is used by DFS and BFS?
+ ● DFS uses a stack (can be implemented using recursion). ● BFS uses a queue. 
+4. Differentiate between Best First Search and A* algorithm.
+ ● Best First Search: Uses only heuristic function h(n).
+● A* Algorithm: Uses both heuristic h(n) and cost so far g(n). A* = g(n) + h(n)
+
+🔹 1. What is the purpose of the Graph class?
+Answer:
+The Graph class is used to create and represent a graph using an adjacency list. It stores vertices and edges and provides functions for graph traversal like DFS and BFS.
+________________________________________
+🔹 2. Why is an adjacency list used instead of an adjacency matrix?
+Answer:
+An adjacency list is memory-efficient, especially for sparse graphs. It only stores existing edges, unlike an adjacency matrix which allocates space for all possible edges.
+________________________________________
+🔹 3. What is the difference between DFS and BFS?
+Answer:
+•	DFS (Depth-First Search) explores as far as possible along each branch before backtracking.
+•	BFS (Breadth-First Search) explores all neighbors of a node before moving to the next level.
+•	DFS uses a stack (implicit via recursion), BFS uses a queue.
+________________________________________
+🔹 4. Why do we need to keep track of visited nodes?
+Answer:
+To prevent visiting the same node multiple times, which can cause infinite loops in cyclic graphs.
+________________________________________
+🔹 5. What data structure is used in BFS and why?
+Answer:
+A queue (FIFO) is used in BFS to maintain the order of exploration level by level.
+________________________________________
+🔹 6. What does self.graph = {i: [] for i in range(vertices)} do?
+Answer:
+It initializes an empty adjacency list for all vertices from 0 to vertices - 1.
+________________________________________
+🔹 7. How does the addEdge() function work and why are two directions added?
+Answer:
+It adds both u → v and v → u because the graph is undirected — connections go both ways.
+________________________________________
+🔹 8. What does DFSRecursive() do?
+Answer:
+It performs a recursive DFS traversal by:
+•	Marking the node as visited,
+•	Printing it,
+•	Recursively visiting all unvisited neighbors.
+________________________________________
+🔹 9. Explain the working of the BFS() function.
+Answer:
+•	Initializes a visited list and a queue.
+•	Starts from the start node.
+•	Dequeues a vertex, prints it, and enqueues all its unvisited neighbors, marking them as visited.
+________________________________________
+🔹 10. Why is a set used for visited in DFS, and a list in BFS?
+Answer:
+•	A set allows fast membership checking (in) and is used in DFS for flexibility.
+•	A list is used in BFS because vertex indices are known and used as indexes.
+________________________________________
+🔹 11. Given the edges, what will be the output of DFS starting from node 0?
+Graph edges:
+0-1
+ \|
+  2-3-4
+Answer:
+Possible DFS output: 0 1 2 3 4 or 0 2 1 3 4 depending on neighbor order in adjacency list.
+________________________________________
+🔹 12. Trace the BFS output for the same graph.
+Answer:
+Output: 0 1 2 3 4
+________________________________________
+🔹 13. What happens if a cycle exists in the graph? Will DFS or BFS handle it?
+Answer:
+Yes, both handle cycles correctly as long as visited nodes are tracked.
+________________________________________
+🔹 14. Can this code be used for a directed graph? How would you modify it?
+Answer:
+Yes, just modify addEdge() to only add u → v and not v → u.
+________________________________________
+🔹 15. Can you convert this recursive DFS into an iterative version?
+Answer:
+Yes. Use a stack instead of recursion:
+def DFSIterative(self, start):
+    visited = set()
+    stack = [start]
+    while stack:
+        vertex = stack.pop()
+        if vertex not in visited:
+            print(vertex, end=' ')
+            visited.add(vertex)
+            stack.extend(reversed(self.graph[vertex]))
+________________________________________
+🔹 16. Which traversal is better for finding the shortest path in an unweighted graph? Why?
+Answer:
+BFS is better because it explores all nodes at the current level before going deeper, ensuring the shortest path.
+________________________________________
+🔹 17. What is the time complexity of DFS and BFS?
+Answer:
+Both have O(V + E) time complexity, where V is the number of vertices and E is the number of edges.
+________________________________________
+🔹 18. What would happen if you forgot to mark nodes as visited?
+Answer:
+The program may go into an infinite loop, especially in graphs with cycles.
+________________________________________
+🔹 19. How can you detect cycles in a graph using DFS?
+Answer:
+By checking if a visited neighbor is not the parent of the current node during traversal.
+________________________________________
+🔹 20. How would you adapt this code to work with disconnected graphs?
+Answer:
+Loop through all vertices and call DFS/BFS for unvisited nodes:
+for v in range(self.vertices):
+    if v not in visited:
+        self.DFSRecursive(v, visited)
+________________________________________
+Basic Conceptual Questions:
+1.	What is the difference between Depth First Search (DFS) and Breadth First Search (BFS)?
+o	Expected Answer: DFS explores as deep as possible along one branch before backtracking, whereas BFS explores all nodes at the present depth level before moving on to the next depth level.
+2.	What are uninformed search algorithms, and how do they differ from informed search algorithms?
+o	Expected Answer: Uninformed search algorithms don't have additional information about the goal other than the problem definition. Informed search algorithms, like A*, use heuristics to guide the search towards the goal more efficiently.
+3.	What is the space complexity of DFS and BFS?
+o	Expected Answer:
+	DFS: O(n * d), where n is the number of nodes and d is the depth of the tree.
+	BFS: O(n * d), where n is the number of nodes and d is the depth of the tree. BFS may require a larger fringe (queue) than DFS.
+4.	Is DFS complete and optimal?
+o	Expected Answer:
+	DFS is complete if the search tree is finite, meaning it will eventually find a solution if one exists.
+	DFS is not optimal, as it may find a longer path than the shortest path.
+5.	Is BFS complete and optimal?
+o	Expected Answer:
+	BFS is complete, meaning it will find a solution if one exists in a finite graph.
+	BFS is optimal when the graph has uniform cost (e.g., each edge has the same cost), as it finds the shortest path.
+________________________________________
+Code-Specific Questions:
+6.	Explain how the addEdge function works in your graph implementation.
+o	Expected Answer: The addEdge function adds an edge between two nodes in an undirected graph by adding each node to the other's adjacency list. This ensures that the edge is bidirectional.
+7.	Why is a stack used in DFS and a queue used in BFS?
+o	Expected Answer: In DFS, a stack (LIFO) is used because DFS explores as deep as possible first, while BFS uses a queue (FIFO) to explore all neighbors at the current depth level before moving deeper.
+8.	What is the significance of the visited data structure in DFS and BFS?
+o	Expected Answer: The visited data structure (a set for DFS and a list for BFS) ensures that nodes are not visited more than once, preventing infinite loops in cyclic graphs.
+9.	What will be the output of DFS and BFS for the following graph:
+10.	0 -> 1, 0 -> 2, 1 -> 2, 2 -> 0, 2 -> 3, 3 -> 3
+Starting at node 2:
+o	Expected Answer:
+	DFS Output: 2 0 1 3
+	BFS Output: 2 0 3 1
+________________________________________
+Advanced Conceptual Questions:
+10.	How would you modify the DFS algorithm to detect cycles in a graph?
+o	Expected Answer: You can use a parent tracking method in DFS to detect cycles. If a visited node is encountered that is not the parent of the current node, a cycle is detected.
+11.	Can you implement DFS iteratively? What would change in the algorithm?
+o	Expected Answer: Yes, DFS can be implemented iteratively using a stack. The recursive call would be replaced by an explicit stack to keep track of nodes.
+12.	How do DFS and BFS perform on a tree vs a graph?
+o	Expected Answer: In a tree, both DFS and BFS will visit all nodes once. In a graph, cycles need to be handled (e.g., using the visited data structure). DFS may be more memory-efficient in sparse graphs, while BFS is better for finding the shortest path.
+13.	If you are given a weighted graph, which algorithm would you use to find the shortest path, and why?
+o	Expected Answer: For weighted graphs, Dijkstra's Algorithm or A search* would be more appropriate than DFS or BFS. BFS can be used if all edges have equal weight.
+14.	What happens if you use DFS on a graph with cycles?
+o	Expected Answer: Without proper handling of visited nodes, DFS may enter an infinite loop due to cycles. To prevent this, the visited set is essential.
+________________________________________
+Practical Application Questions:
+15.	Where would you use DFS and BFS in real-world applications?
+o	Expected Answer:
+	DFS is used in pathfinding (e.g., maze-solving), topological sorting, and exploring all possible configurations (like in game trees).
+	BFS is used for finding the shortest path in an unweighted graph (e.g., in navigation systems or social networks).
+16.	What is the time complexity of DFS and BFS?
+o	Expected Answer: The time complexity for both DFS and BFS is O(V + E), where V is the number of vertices and E is the number of edges, as they visit each node and edge at most once.
+________________________________________
+Theoretical and Algorithm-Based Questions:
+17.	Explain the term "fringe" in the context of search algorithms.
+o	Expected Answer: The fringe is the collection of nodes that have been discovered but not yet fully explored. In DFS, this is represented by the stack, and in BFS, by the queue.
+18.	Describe the steps involved in the DFS algorithm and BFS algorithm.
+o	Expected Answer:
+	DFS:
+1.	Push the starting node to the stack and mark it as visited.
+2.	Visit all unvisited adjacent nodes and push them onto the stack.
+3.	If no adjacent node is found, pop the stack and repeat the process.
+	BFS:
+1.	Insert the starting node into the queue and mark it as visited.
+2.	Visit all unvisited adjacent nodes and insert them into the queue.
+3.	Dequeue the front element and repeat the process.
+________________________________________
+Algorithm Optimization and Edge Case Questions:
+19.	What would happen if you forgot to mark nodes as visited in DFS or BFS?
+o	Expected Answer: If nodes are not marked as visited, both DFS and BFS can enter an infinite loop when traversing cyclic graphs, or visit the same node multiple times.
+20.	What are some optimizations you can apply to DFS or BFS?
+o	Expected Answer: Optimizations could include using a visited set (or array) to quickly check for previously visited nodes, or using heuristics in the search algorithms to improve performance in informed search scenarios (e.g., in A* search).
+________________________________________
+
