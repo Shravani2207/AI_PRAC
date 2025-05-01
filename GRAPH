@@ -1,0 +1,231 @@
+G = [[0, 1, 1, 0, 1, 0],
+     [1, 0, 1, 1, 0, 1],
+     [1, 1, 0, 1, 1, 0],
+     [0, 1, 1, 0, 0, 1],
+     [1, 0, 1, 0, 0, 1],
+     [0, 1, 0, 1, 1, 0]]
+nodes = "abcdef"
+t_ = {nodes[i]: i for i in range(len(G))}
+degree = [sum(G[i]) for i in range(len(G))]
+colorDict = {nodes[i]: ["Blue", "Red", "Yellow", "Green"] for i in range(len(G))}
+sortedNodes = []
+used_indices = []
+for _ in range(len(degree)):
+    _max = -1
+    idx = -1
+    for j in range(len(degree)):
+        if j not in used_indices and degree[j] > _max:
+            _max = degree[j]
+            idx = j
+    used_indices.append(idx)
+    sortedNodes.append(nodes[idx])
+solution = {}
+for n in sortedNodes:
+    setColor = colorDict[n][0]  # Pick first available color
+    solution[n] = setColor
+    for j in range(len(G[t_[n]])):
+        if G[t_[n]][j] == 1 and setColor in colorDict[nodes[j]]:
+            colorDict[nodes[j]].remove(setColor)
+print("Graph Coloring Result:")
+for node, color in sorted(solution.items()):
+    print(f"Node {node} = {color}")
+
+________________________________________
+1. Define the graph G as an adjacency matrix
+G = [[0, 1, 1, 0, 1, 0],
+     [1, 0, 1, 1, 0, 1],
+     [1, 1, 0, 1, 1, 0],
+     [0, 1, 1, 0, 0, 1],
+     [1, 0, 1, 0, 0, 1],
+     [0, 1, 0, 1, 1, 0]]
+•	G is a 6x6 adjacency matrix representing a graph.
+•	1 means there is an edge between nodes; 0 means no edge.
+•	For example, G[0][1] = 1 means node 0 is connected to node 1.
+________________________________________
+2. Define the node labels
+nodes = "abcdef"
+•	The 6 nodes in the graph are labeled 'a' to 'f'.
+________________________________________
+3. Create a mapping from node names to indices
+t_ = {nodes[i]: i for i in range(len(G))}
+•	t_ is a dictionary to convert node names to their corresponding indices in the adjacency matrix.
+•	Example: t_['a'] = 0, t_['f'] = 5.
+________________________________________
+4. Calculate the degree of each node
+degree = [sum(G[i]) for i in range(len(G))]
+•	Degree = number of edges connected to the node.
+•	Example: if row 0 is [0, 1, 1, 0, 1, 0], then degree[0] = 3.
+________________________________________
+5. Initialize available colors for each node
+colorDict = {nodes[i]: ["Blue", "Red", "Yellow", "Green"] for i in range(len(G))}
+•	Every node is initially allowed to take any of the 4 colors.
+________________________________________
+6. Sort nodes in descending order of degree (greedy step)
+sortedNodes = []
+used_indices = []
+for _ in range(len(degree)):
+    _max = -1
+    idx = -1
+    for j in range(len(degree)):
+        if j not in used_indices and degree[j] > _max:
+            _max = degree[j]
+            idx = j
+    used_indices.append(idx)
+    sortedNodes.append(nodes[idx])
+•	Select nodes one by one based on highest degree (most connected).
+•	The goal is to color high-degree nodes first.
+•	sortedNodes contains the node labels sorted by descending degree.
+________________________________________
+7. Assign colors to nodes greedily
+solution = {}
+for n in sortedNodes:
+    setColor = colorDict[n][0]  # Pick first available color
+    solution[n] = setColor
+•	Go through the sorted nodes and assign the first available color from colorDict.
+________________________________________
+8. Remove the assigned color from neighbor nodes’ options
+    for j in range(len(G[t_[n]])):
+        if G[t_[n]][j] == 1 and setColor in colorDict[nodes[j]]:
+            colorDict[nodes[j]].remove(setColor)
+•	For each neighbor of the current node, remove the assigned color from their available colors.
+•	This ensures no two adjacent nodes get the same color.
+________________________________________
+9. Print the final coloring solution
+print("Graph Coloring Result:")
+for node, color in sorted(solution.items()):
+    print(f"Node {node} = {color}")
+•	Display the color assigned to each node, sorted alphabetically.
+________________________________________
+Example Output (may vary based on graph):
+Graph Coloring Result:
+Node a = Blue
+Node b = Red
+Node c = Yellow
+Node d = Blue
+Node e = Red
+Node f = Yellow
+________________________________________
+Constraints to solve N-Queen Problem?
+ No two queens should be in the same row, column or diagonal. 
+ Compare Backtracking and Branch and Bound. 
+● Backtracking: Tries all possibilities, skips invalid ones. ● Branch and Bound: Uses cost to cut down unnecessary paths.
+  What is a Constraint Satisfaction Problem (CSP)?
+ Problems with rules/conditions (constraints) that must be satisfied. Example: Sudoku, N-Queen. ________________________________________
+1. What is the purpose of this code?
+•	Answer:
+The code implements a greedy graph coloring algorithm, which assigns colors to nodes in a graph such that no two adjacent nodes have the same color. It does this by sorting the nodes in descending order of their degree and then assigning the first available color to each node.
+________________________________________
+2. What is the significance of sorting the nodes based on their degree?
+•	Answer:
+Sorting the nodes by degree ensures that the nodes with the highest number of connections (edges) are colored first. This is part of the greedy approach, which prioritizes nodes that have the highest potential to constrain color assignments for other nodes. This method often leads to an efficient solution.
+________________________________________
+3. How are the neighbors of each node handled in this algorithm?
+•	Answer:
+The algorithm ensures that a node's color doesn't conflict with its neighbors. Once a color is assigned to a node, that color is removed from the list of available colors for the node's neighbors. This ensures that adjacent nodes do not share the same color.
+________________________________________
+4. Why does the code use colorDict and how is it initialized?
+•	Answer:
+colorDict is a dictionary that stores the available colors for each node. Initially, every node can take any of the 4 colors: "Blue", "Red", "Yellow", and "Green". As nodes are colored, the available colors for neighboring nodes are updated to prevent adjacent nodes from being assigned the same color.
+________________________________________
+5. What is the role of the sortedNodes list?
+•	Answer:
+The sortedNodes list stores the nodes in order of their degree, with nodes having the highest degree coming first. This list is crucial for the greedy coloring approach, as it ensures that nodes with the highest degree are colored first, minimizing the chances of a color conflict.
+________________________________________
+6. What does the used_indices list do in this code?
+•	Answer:
+The used_indices list tracks the indices of nodes that have already been processed. This prevents the algorithm from reprocessing nodes and ensures that each node is colored only once.
+________________________________________
+7. How does the algorithm ensure that no two adjacent nodes are colored the same?
+•	Answer:
+The algorithm removes the assigned color from the list of available colors for each neighboring node. This way, when it colors a node, its neighbors cannot take the same color. The first available color from the remaining options is assigned to each node.
+________________________________________
+8. What happens if a node has no available colors left?
+•	Answer:
+In this specific implementation, the algorithm assumes that the graph can always be colored using the available colors. If a node has no available color left, it would imply that the graph is not properly colored, but since the graph is assumed to be 4-colorable, this scenario doesn't occur in the code.
+________________________________________
+9. What is the time complexity of this algorithm?
+•	Answer:
+The time complexity of this algorithm is O(V^2), where V is the number of nodes (vertices) in the graph. This is because:
+o	Sorting the nodes by degree takes O(V log V).
+o	For each node, we check all its neighbors to update the available colors, which takes O(V) per node. Hence, the total complexity is O(V^2).
+________________________________________
+10. How does this algorithm compare with other graph coloring algorithms like backtracking?
+•	Answer:
+This algorithm is a greedy approach, which aims to quickly find a solution by choosing the most optimal decision at each step. While it is faster and simpler, it doesn't guarantee the minimum number of colors (optimal solution) in all cases. In contrast, backtracking algorithms explore all possibilities and guarantee an optimal solution, but they tend to be slower and computationally expensive.
+________________________________________
+11. Can this algorithm be applied to non-connected graphs?
+•	Answer:
+Yes, this algorithm can be applied to non-connected graphs as well. The greedy coloring method works regardless of whether the graph is connected or disconnected. The process will color each connected component independently, ensuring that no two adjacent nodes within each component share the same color.
+________________________________________
+12. What are the practical applications of graph coloring?
+•	Answer:
+Graph coloring has several practical applications, including:
+o	Scheduling problems, where tasks (nodes) with dependencies (edges) must be assigned non-overlapping time slots (colors).
+o	Register allocation in compilers, where variables (nodes) must be assigned registers (colors) without conflicts.
+o	Frequency assignment in mobile networks, where cells (nodes) must be assigned frequencies (colors) that do not interfere with neighboring cells.
+________________________________________
+Here are the potential questions that could be asked in an oral or viva exam regarding the N-Queens problem implemented using backtracking:
+________________________________________
+1. What is the N-Queens problem?
+•	Answer:
+The N-Queens problem is a classic puzzle in which the task is to place N queens on an N×N chessboard such that no two queens can attack each other. This means no two queens can share the same row, column, or diagonal.
+________________________________________
+2. How does the backtracking approach work for solving the N-Queens problem?
+•	Answer:
+Backtracking is used to find solutions by trying to place queens one by one in different columns of each row. If a queen can be placed without violating the constraints (i.e., no two queens attack each other), we move on to the next queen. If placing a queen results in an invalid state, we backtrack by removing the previous queens and trying a different position. This continues until a valid solution is found or all possibilities are exhausted.
+________________________________________
+3. Why is backtracking used for solving the N-Queens problem?
+•	Answer:
+Backtracking is used because it allows us to explore all possible configurations of queens on the chessboard. If we encounter an invalid configuration, backtracking helps us undo the previous step and try a different option. It provides an efficient way to search through the possible placements and guarantees that all solutions are explored.
+________________________________________
+4. What are the conditions that need to be checked before placing a queen on the board?
+•	Answer:
+Before placing a queen on the board, we check:
+o	Column constraint: The queen should not be placed in a column where another queen is already placed.
+o	Diagonal constraint: The queen should not be placed on the same diagonal as any previously placed queens. This is checked for both the primary and secondary diagonals.
+________________________________________
+5. Can you explain how the recursive backtracking function works in this problem?
+•	Answer:
+The recursive function attempts to place queens row by row. For each row, the function tries all columns to place a queen and checks if it’s safe to do so. If placing a queen results in a valid configuration, the function proceeds to the next row. If a queen cannot be placed in any column of a row, the function backtracks by removing the last placed queen and tries placing the previous queens in new positions. This continues until all queens are placed successfully or all possibilities are explored.
+________________________________________
+6. What is the role of the "isSafe" function in this algorithm?
+•	Answer:
+The "isSafe" function checks whether a queen can be placed at a particular position on the chessboard. It ensures that no other queen is in the same column or on the same diagonal. If the position is safe, it returns true; otherwise, it returns false.
+________________________________________
+7. How does the algorithm backtrack when it encounters a conflict?
+•	Answer:
+When the algorithm encounters a conflict (i.e., a queen cannot be placed in a particular column of a row), it backtracks by removing the queen placed in the previous row and tries the next possible column for that row. This process repeats recursively, moving backward through the rows until a feasible position is found or all possibilities are exhausted.
+________________________________________
+8. How do you know when to stop the algorithm and consider a solution valid?
+•	Answer:
+The algorithm stops when all N queens are placed on the board without any conflicts (i.e., no two queens are in the same row, column, or diagonal). At this point, a valid solution is found, and the board configuration is printed.
+________________________________________
+9. What would happen if there is no valid solution for a given N?
+•	Answer:
+If there is no valid solution, the algorithm will exhaust all possible configurations and backtrack all the way to the first queen without finding a valid placement. In such cases, the algorithm will terminate, indicating that no solution exists for the given value of N.
+________________________________________
+10. What is the time complexity of the backtracking solution for the N-Queens problem?
+•	Answer:
+The time complexity of the backtracking algorithm for the N-Queens problem is O(N!). This is because in the worst case, the algorithm needs to explore all possible ways to place the N queens, which is roughly N factorial (N!) possible configurations. However, backtracking helps prune the search space by eliminating invalid configurations early, which can sometimes reduce the actual time complexity.
+________________________________________
+11. How would you modify the algorithm to find all possible solutions to the N-Queens problem?
+•	Answer:
+To find all possible solutions, you would modify the algorithm to not terminate after finding the first valid solution. Instead of returning after finding a solution, the algorithm would continue to backtrack and store each valid solution it finds. All solutions could then be printed or returned as a list of configurations.
+________________________________________
+12. Can you implement the solution for larger values of N, such as N=8?
+•	Answer:
+Yes, the algorithm works for any N, including larger values like N=8. However, the time taken to find a solution increases as N grows due to the factorial growth of possible configurations. The algorithm remains efficient in finding solutions but may take more time for larger boards.
+________________________________________
+13. What are the real-world applications of solving the N-Queens problem using backtracking?
+•	Answer:
+While the N-Queens problem itself is a puzzle, the techniques used in its solution, such as backtracking, are widely applicable to other problems in artificial intelligence and optimization, such as:
+o	Puzzle solving (e.g., Sudoku, maze-solving)
+o	Constraint satisfaction problems in scheduling and resource allocation
+o	Game theory (e.g., chess-like games)
+o	Graph coloring and map coloring problems
+________________________________________
+14. Can this approach be used for solving other constraint satisfaction problems?
+•	Answer:
+Yes, backtracking is a general technique used to solve a variety of constraint satisfaction problems (CSPs), including problems like Sudoku, graph coloring, knapsack problem, traveling salesman problem, and crossword puzzles, where the goal is to find a solution that satisfies a set of constraints.
+________________________________________
+
