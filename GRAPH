@@ -61,8 +61,31 @@ colorDict = {nodes[i]: ["Blue", "Red", "Yellow", "Green"] for i in range(len(G))
 •	Every node is initially allowed to take any of the 4 colors.
 ________________________________________
 6. Sort nodes in descending order of degree (greedy step)
-sortedNodes = []
-used_indices = []
+
+🔤 1. nodes = "abcdef"
+•	nodes is a string representing the names of graph nodes: 'a', 'b', 'c', 'd', 'e', 'f'.
+________________________________________
+🔢 2. t_ = {nodes[i]: i for i in range(len(G))}
+•	This creates a dictionary t_ mapping each node name to its index in the graph G.
+•	Example: {'a': 0, 'b': 1, ..., 'f': 5}.
+•	Useful for quickly looking up a node's index in the adjacency matrix G.
+________________________________________
+📊 3. degree = [sum(G[i]) for i in range(len(G))]
+•	Computes the degree of each node — i.e., the number of edges connected to the node.
+•	G is assumed to be an adjacency matrix (2D list of 0s and 1s).
+•	sum(G[i]) gives the number of 1s in the i-th row, meaning how many neighbors node i has.
+________________________________________
+🎨 4. colorDict = {nodes[i]: ["Blue", "Red", "Yellow", "Green"] for i in range(len(G))}
+•	Each node starts with all 4 color options available.
+•	This dict will later be updated as nodes are assigned colors and neighbors eliminate choices.
+________________________________________
+📍 5. sortedNodes = []
+•	Will store the nodes sorted by descending degree — i.e., start coloring with the most connected node.
+________________________________________
+🔁 6. used_indices = []
+•	Keeps track of which node indices have already been added to sortedNodes.
+________________________________________
+🔄 7. Sorting Loop
 for _ in range(len(degree)):
     _max = -1
     idx = -1
@@ -72,9 +95,14 @@ for _ in range(len(degree)):
             idx = j
     used_indices.append(idx)
     sortedNodes.append(nodes[idx])
-•	Select nodes one by one based on highest degree (most connected).
-•	The goal is to color high-degree nodes first.
-•	sortedNodes contains the node labels sorted by descending degree.
+•	This loop sorts the nodes by degree (highest first):
+o	For each pass, it finds the unused node with the highest degree.
+o	Adds its index to used_indices.
+o	Adds its name (e.g., 'c') to sortedNodes.
+________________________________________
+🗂️ 8. solution = {}
+•	This will store the final color assignment for each node.
+•	Example after completion: {'a': 'Red', 'b': 'Blue', ...}
 ________________________________________
 7. Assign colors to nodes greedily
 solution = {}
@@ -105,7 +133,10 @@ Node d = Blue
 Node e = Red
 Node f = Yellow
 ________________________________________
-
+Compare Backtracking and Branch and Bound. 
+● Backtracking: Tries all possibilities, skips invalid ones. ● Branch and Bound: Uses cost to cut down unnecessary paths.
+  What is a Constraint Satisfaction Problem (CSP)?
+ Problems with rules/conditions (constraints) that must be satisfied. Example: Sudoku, N-Queen. ________________________________________
 1. What is the purpose of this code?
 •	Answer:
 The code implements a greedy graph coloring algorithm, which assigns colors to nodes in a graph such that no two adjacent nodes have the same color. It does this by sorting the nodes in descending order of their degree and then assigning the first available color to each node.
@@ -159,8 +190,11 @@ o	Scheduling problems, where tasks (nodes) with dependencies (edges) must be ass
 o	Register allocation in compilers, where variables (nodes) must be assigned registers (colors) without conflicts.
 o	Frequency assignment in mobile networks, where cells (nodes) must be assigned frequencies (colors) that do not interfere with neighboring cells.
 ________________________________________
-
-
+________________________________________
+14. Can this approach be used for solving other constraint satisfaction problems?
+•	Answer:
+Yes, backtracking is a general technique used to solve a variety of constraint satisfaction problems (CSPs), including problems like Sudoku, graph coloring, knapsack problem, traveling salesman problem, and crossword puzzles, where the goal is to find a solution that satisfies a set of constraints.
+________________________________________
 1.	Q: What is a Constraint Satisfaction Problem (CSP)?
 A: A CSP is a problem composed of variables, domains for those variables, and constraints that restrict the values the variables can take.
 2.	Q: What are the three main components of a CSP?
